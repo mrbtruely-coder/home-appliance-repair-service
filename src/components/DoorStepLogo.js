@@ -1,4 +1,3 @@
-'use client';
 import Image from 'next/image';
 
 export default function DoorStepLogo({ size = 84, dark = false, className = '' }) {

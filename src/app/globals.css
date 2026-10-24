@@ -9225,35 +9225,64 @@ video {
 /* 3. Header & Navigation Mobile Breakpoint (<= 1024px) */
 @media (max-width: 1024px) {
   .desktop-nav,
-  .site-header .desktop-nav,
-  .header-actions .header-book-support-btn,
-  .header-book-support-btn {
+  .site-header .desktop-nav {
     display: none !important;
   }
 
+  .header-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  /* Orange "Book Service" button visible in header next to menu button */
+  .header-actions .header-book-support-btn,
+  .header-book-support-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #FF6B00 !important;
+    color: #FFFFFF !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    padding: 9px 16px !important;
+    border-radius: 10px !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.28) !important;
+    border: none !important;
+    white-space: nowrap !important;
+    transition: background 0.15s ease, transform 0.15s ease !important;
+  }
+
+  .header-actions .header-book-support-btn:hover {
+    background: #E55A00 !important;
+    transform: translateY(-1px) !important;
+  }
+
+  /* Mobile menu toggle matching reference: clean outline box */
   .site-header .menu-toggle,
   .menu-toggle {
     display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: #FFF4EC;
-    border: 1.5px solid #FFCCA3;
-    color: #FF6B00;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all 0.2s ease;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 10px !important;
+    background: #FFFFFF !important;
+    border: 1.5px solid #E2E8F0 !important;
+    color: #0A2558 !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+    transition: all 0.2s ease !important;
   }
 
   .menu-toggle:hover {
-    background: #FFEDD5;
-    border-color: #FF6B00;
+    background: #F8FAFC !important;
+    border-color: #CBD5E1 !important;
   }
 
   .header-inner {
-    min-height: 70px !important;
+    min-height: 68px !important;
     padding: 6px 0 !important;
     display: flex !important;
     align-items: center !important;
@@ -9261,58 +9290,119 @@ video {
   }
 
   .header-brand-link .brand-logo-img {
-    height: 54px !important;
-    max-height: 56px !important;
+    height: 52px !important;
+    max-height: 54px !important;
     width: auto !important;
   }
 
   .header-brand-link .doorstep-brand-lockup {
-    padding: 4px 10px !important;
+    padding: 4px 8px !important;
   }
 
-  /* Mobile Slide-down Drawer Menu */
+  /* Mobile Slide-down Drawer Menu Matching Reference Screenshot */
   .mobile-nav {
     display: flex !important;
-    flex-direction: column;
-    background: #FFFFFF;
-    border-top: 1px solid #E2E8F0;
-    padding: 16px 20px 28px;
-    box-shadow: 0 20px 40px rgba(10, 37, 88, 0.16);
-    max-height: calc(100vh - 75px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    flex-direction: column !important;
+    background: #FFFFFF !important;
+    border-top: 1px solid #E2E8F0 !important;
+    padding: 10px 24px 34px !important;
+    box-shadow: 0 20px 40px rgba(10, 37, 88, 0.16) !important;
+    max-height: calc(100vh - 72px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
     width: 100%;
   }
 
-  .mobile-nav > a:not(.button) {
-    padding: 12px 0;
-    border-bottom: 1px solid #F1F5F9;
-    color: #0A2558;
-    font-size: 14.5px;
-    font-weight: 700;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .mobile-nav-item {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #0A2558 !important;
+    padding: 16px 0 !important;
+    border-bottom: 1px solid #F1F5F9 !important;
+    text-decoration: none !important;
+    display: block !important;
+    transition: color 0.18s ease !important;
   }
 
-  .mobile-nav > a:not(.button):hover {
-    color: #FF6B00;
+  .mobile-nav-item:hover {
+    color: #FF6B00 !important;
   }
 
-  .mobile-nav .button-primary {
-    background: #FF6B00;
-    color: #FFFFFF;
-    font-size: 14px;
-    font-weight: 800;
-    padding: 13px 20px;
-    border-radius: 12px;
-    text-align: center;
-    text-decoration: none;
-    box-shadow: 0 4px 16px rgba(255, 107, 0, 0.3);
-    margin-top: 14px;
-    display: block;
-    width: 100%;
+  /* Mobile Accordion Groups (Services & Locations) */
+  .mobile-accordion-group {
+    border-bottom: 1px solid #F1F5F9 !important;
+  }
+
+  .mobile-accordion-trigger {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #0A2558 !important;
+    padding: 16px 0 !important;
+    border: none !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    outline: none !important;
+    text-align: left !important;
+    transition: color 0.18s ease !important;
+  }
+
+  .mobile-accordion-trigger:hover {
+    color: #FF6B00 !important;
+  }
+
+  .mobile-chevron {
+    color: #0A2558 !important;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .mobile-chevron.rotate-180 {
+    transform: rotate(180deg) !important;
+  }
+
+  .mobile-accordion-dropdown {
+    padding: 8px 14px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    background: #F8FAFD !important;
+    border-radius: 12px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .mobile-sub-link {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+    padding: 7px 10px !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    transition: all 0.15s ease !important;
+  }
+
+  .mobile-sub-link:hover {
+    color: #FF6B00 !important;
+    background: #FFF4EC !important;
+  }
+
+  .mobile-view-all-link {
+    color: #FF6B00 !important;
+    font-weight: 800 !important;
+    margin-top: 4px !important;
+    border-top: 1px dashed #E2E8F0 !important;
+    padding-top: 10px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .header-actions .header-book-support-btn {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
   }
 }
 
@@ -9540,39 +9630,54 @@ video {
   }
 }
 
-/* 7. Two-Step Booking Form Responsiveness */
+/* 7. Two-Step Booking Form Responsiveness (Booking Form Upside on Mobile) */
 @media (max-width: 900px) {
   .two-step-booking-wrap {
-    padding: 28px 0 40px !important;
+    padding: 24px 0 40px !important;
   }
 
   .two-step-grid {
-    grid-template-columns: 1fr !important;
-    gap: 22px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 26px !important;
   }
 
-  .two-step-right-card {
-    order: -1 !important; /* Form on top for mobile users */
-    padding: 20px 16px !important;
-    border-radius: 18px !important;
+  /* Booking form card placed at the very top (UPSIDE) */
+  .two-step-right-box {
+    order: 1 !important;
+    width: 100% !important;
   }
 
-  .appliance-selector-grid {
+  /* Instructions and Trust cards placed below the form (DOWNSIDE) */
+  .two-step-left-content {
+    order: 2 !important;
+    width: 100% !important;
+    padding-right: 0 !important;
+    margin-top: 8px !important;
+  }
+
+  .request-service-card {
+    padding: 22px 16px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 30px rgba(10, 37, 88, 0.08) !important;
+  }
+
+  .appliance-tiles-row {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 8px !important;
   }
 
-  .appliance-choice-tile {
-    padding: 12px 8px !important;
+  .appliance-tile-btn {
+    padding: 12px 6px !important;
   }
 
-  .appliance-tile-icon-box {
-    width: 44px !important;
-    height: 44px !important;
+  .appliance-tile-icon svg {
+    width: 24px !important;
+    height: 24px !important;
   }
 
-  .appliance-tile-title {
-    font-size: 12px !important;
+  .appliance-tile-name {
+    font-size: 10px !important;
   }
 
   .two-step-subcategories-bar {

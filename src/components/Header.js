@@ -83,6 +83,8 @@ const LOCATION_DROPDOWN_ITEMS = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobileLocationsOpen, setMobileLocationsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const dropdownRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -90,8 +92,11 @@ export default function Header() {
   const pathname = usePathname();
 
   const isLinkActive = (path) => {
-    if (path === '/') return pathname === '/';
-    return pathname?.startsWith(path);
+    if (!pathname) return false;
+    const cleanPath = path.replace(/\/+$/, '') || '/';
+    const cleanCurrent = pathname.replace(/\/+$/, '') || '/';
+    if (cleanPath === '/') return cleanCurrent === '/';
+    return cleanCurrent.startsWith(cleanPath);
   };
 
   const handleMouseEnter = (menuName) => {
@@ -161,6 +166,8 @@ export default function Header() {
   useEffect(() => {
     closeAllDropdowns();
     setOpen(false);
+    setMobileServicesOpen(false);
+    setMobileLocationsOpen(false);
   }, [pathname]);
 
   return (
@@ -168,10 +175,15 @@ export default function Header() {
       {/* Top Banner Matching Screenshot */}
       <div className="doorstep-top-banner">
         <div className="container top-banner-content">
-          <span className="top-banner-icon">⚡</span>
-          <span className="top-banner-text">
-            SAME-DAY DOORSTEP APPLIANCE REPAIR IN HYDERABAD — CALL <a href={`tel:${PHONE_E164}`}>{PHONE_DISPLAY}</a>
-          </span>
+          <div className="top-banner-main-line">
+            <span className="top-banner-icon">⚡</span>
+            <span className="top-banner-text">
+              SAME-DAY DOORSTEP APPLIANCE REPAIR IN <strong>HYDERABAD</strong>
+            </span>
+          </div>
+          <div className="top-banner-call-line">
+            CALL <a href={`tel:${PHONE_E164}`}>{PHONE_DISPLAY}</a>
+          </div>
         </div>
       </div>
 
@@ -187,10 +199,10 @@ export default function Header() {
               closeAllDropdowns();
             }}
           >
-            <DoorStepLogo size={84} />
+            <DoorStepLogo size={78} />
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation (Hidden on <= 1024px) */}
           <nav className="desktop-nav modern-nav" aria-label="Main navigation">
             <Link
               href="/"
@@ -343,10 +355,11 @@ export default function Header() {
             </Link>
           </nav>
 
+          {/* Header Action Buttons (Book Service + Mobile Menu Toggle) */}
           <div className="header-actions">
             <Link
               href="/booking/"
-              className="button button-primary header-book-support-btn"
+              className="header-book-support-btn"
             >
               Book Service
             </Link>
@@ -357,67 +370,120 @@ export default function Header() {
               aria-expanded={open}
               onClick={() => setOpen(!open)}
             >
-              {open ? <X size={24} /> : <Menu size={24} />}
+              {open ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation Drawer Matching Reference Image */}
         {open && (
           <nav className="mobile-nav" aria-label="Mobile navigation">
-            <Link href="/" onClick={() => setOpen(false)}>
+            <Link
+              href="/"
+              onClick={() => setOpen(false)}
+              className="mobile-nav-item"
+            >
               Home
             </Link>
 
-            {/* Mobile Services Section */}
-            <div style={{ padding: '8px 0 4px', fontSize: '11px', fontWeight: 800, color: '#FF6B00', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-              Appliance Services
-            </div>
-            {SERVICE_DROPDOWN_ITEMS.map((item) => (
-              <Link
-                key={item.slug}
-                href={`/services/${item.slug}/`}
-                onClick={() => setOpen(false)}
-                style={{ paddingLeft: '14px', fontSize: '13px' }}
+            {/* Mobile Services Accordion */}
+            <div className="mobile-accordion-group">
+              <button
+                type="button"
+                className="mobile-accordion-trigger"
+                onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                aria-expanded={mobileServicesOpen}
               >
-                • {item.name}
-              </Link>
-            ))}
+                <span>Services</span>
+                <ChevronDown
+                  size={18}
+                  className={`mobile-chevron ${mobileServicesOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
 
-            {/* Mobile Locations Section */}
-            <div style={{ padding: '12px 0 4px', fontSize: '11px', fontWeight: 800, color: '#0A2558', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-              Service Hubs & Cities
+              {mobileServicesOpen && (
+                <div className="mobile-accordion-dropdown">
+                  {SERVICE_DROPDOWN_ITEMS.map((item) => (
+                    <Link
+                      key={item.slug}
+                      href={`/services/${item.slug}/`}
+                      onClick={() => setOpen(false)}
+                      className="mobile-sub-link"
+                    >
+                      <span>• {item.name}</span>
+                    </Link>
+                  ))}
+                  <Link
+                    href="/services/"
+                    onClick={() => setOpen(false)}
+                    className="mobile-sub-link mobile-view-all-link"
+                  >
+                    <span>Explore All Services →</span>
+                  </Link>
+                </div>
+              )}
             </div>
-            {LOCATION_DROPDOWN_ITEMS.map((loc) => (
-              <Link
-                key={loc.slug}
-                href={`/service-center/${loc.slug}/`}
-                onClick={() => setOpen(false)}
-                style={{ paddingLeft: '14px', fontSize: '13px' }}
-              >
-                📍 {loc.name}
-              </Link>
-            ))}
 
-            <div style={{ borderTop: '1px solid #F1F5F9', marginTop: '10px', paddingTop: '6px' }}>
-              <Link href="/booking/" onClick={() => setOpen(false)} className="mobile-active">
-                Book Service
-              </Link>
-              <Link href="/faqs/" onClick={() => setOpen(false)}>
-                FAQs
-              </Link>
-              <Link href="/contact/" onClick={() => setOpen(false)}>
-                Contact Us
-              </Link>
+            {/* Mobile Locations Accordion */}
+            <div className="mobile-accordion-group">
+              <button
+                type="button"
+                className="mobile-accordion-trigger"
+                onClick={() => setMobileLocationsOpen(!mobileLocationsOpen)}
+                aria-expanded={mobileLocationsOpen}
+              >
+                <span>Locations</span>
+                <ChevronDown
+                  size={18}
+                  className={`mobile-chevron ${mobileLocationsOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {mobileLocationsOpen && (
+                <div className="mobile-accordion-dropdown">
+                  {LOCATION_DROPDOWN_ITEMS.map((loc) => (
+                    <Link
+                      key={loc.slug}
+                      href={`/service-center/${loc.slug}/`}
+                      onClick={() => setOpen(false)}
+                      className="mobile-sub-link"
+                    >
+                      <span>📍 {loc.name}</span>
+                    </Link>
+                  ))}
+                  <Link
+                    href="/service-center/"
+                    onClick={() => setOpen(false)}
+                    className="mobile-sub-link mobile-view-all-link"
+                  >
+                    <span>All City Hubs & Coverage →</span>
+                  </Link>
+                </div>
+              )}
             </div>
 
             <Link
               href="/booking/"
-              className="button button-primary"
               onClick={() => setOpen(false)}
-              style={{ marginTop: '10px', textAlign: 'center' }}
+              className="mobile-nav-item"
             >
               Book Service
+            </Link>
+
+            <Link
+              href="/faqs/"
+              onClick={() => setOpen(false)}
+              className="mobile-nav-item"
+            >
+              FAQs
+            </Link>
+
+            <Link
+              href="/contact/"
+              onClick={() => setOpen(false)}
+              className="mobile-nav-item"
+            >
+              Contact Us
             </Link>
           </nav>
         )}

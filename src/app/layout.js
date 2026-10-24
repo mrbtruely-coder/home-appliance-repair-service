@@ -33,8 +33,8 @@ export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en-IN">
-      <body>
+    <html lang="en-IN" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <ToastProvider>
           <StructuredData data={localBusinessJsonLd()} />
           <Header />
