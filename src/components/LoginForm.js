@@ -1,0 +1,12 @@
+'use client';
+import Link from 'next/link';
+import { useCallback, useState } from 'react';
+import { LockKeyhole, UserRound } from 'lucide-react';
+import TurnstileWidget from '@/components/TurnstileWidget';
+export default function LoginForm(){
+ const [phone,setPhone]=useState(''); const [password,setPassword]=useState(''); const [error,setError]=useState(''); const [captchaToken,setCaptchaToken]=useState('');
+ const onCaptchaToken=useCallback(token=>setCaptchaToken(token),[]);
+ const captchaConfigured=Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
+ const submit=e=>{e.preventDefault();setError('');if(phone.replace(/\D/g,'').length<10||password.trim().length<4){setError('Enter a valid 10-digit mobile number and at least 4 characters in the preview password/OTP field.');return;}if(captchaConfigured&&!captchaToken){setError('Please complete the security check.');return;}try{localStorage.setItem('doorstep-user',JSON.stringify({name:'Doorstep Member',phone:phone.replace(/\D/g,'')}));window.dispatchEvent(new Event('doorstep-auth-change'));window.location.href='/';}catch{setError('This browser does not allow local preview storage. You can continue as a guest.');}};
+ return <section className="auth-page"><div className="auth-card"><div className="auth-icon"><UserRound size={23}/></div><span className="eyebrow">WELCOME BACK</span><h1>Sign in to Doorstep</h1><p>Access your service requests and notifications after secure account verification.</p><form onSubmit={submit} className="auth-form"><label>Mobile number<input required inputMode="tel" autoComplete="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="Enter your mobile number" minLength={10}/></label><label>Password / OTP (preview)<input required type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter password / OTP"/></label><TurnstileWidget onToken={onCaptchaToken}/>{error&&<p className="form-error">{error}</p>}<button className="button button-primary" type="submit"><LockKeyhole size={16}/> Continue securely</button></form><p className="auth-note">New to Doorstep? <Link href="/register/">Create an account</Link></p><p className="auth-note">Just need a service? <Link href="/booking/">Continue as a guest</Link></p><small className="demo-warning">Demo sign-in only · This form does not authenticate a real account. CAPTCHA tokens are not server-verified in this static preview. Connect a backend before launch.</small></div></section>
+}

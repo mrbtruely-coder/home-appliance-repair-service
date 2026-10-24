@@ -1,0 +1,58 @@
+export const ARTICLES = [
+  {
+    slug: 'ac-not-cooling-troubleshooting',
+    category: 'AC care',
+    title: 'AC Not Cooling? Safe Checks Before You Book a Repair',
+    description: 'Learn simple, safe checks for an air conditioner that is not cooling well, and know when to stop troubleshooting and request professional help.',
+    date: '2026-10-23',
+    readTime: '4 min read',
+    intro: 'An AC that is running but not cooling can have several causes, from airflow restrictions to a fault that needs professional diagnosis. These basic checks can help you describe the problem clearly without opening the appliance.',
+    sections: [
+      { heading: 'Check the settings and airflow', paragraphs: ['Confirm the unit is set to cooling mode and that the temperature setting is lower than the room temperature. Check that supply vents are not blocked by curtains or furniture.', 'If your model has a user-accessible filter, follow the manufacturer instructions to inspect and clean it. Switch the unit off first and never remove covers that are not intended for routine user maintenance.'] },
+      { heading: 'Look for warning signs', paragraphs: ['Water leaking indoors, repeated tripping, burning smells, unusual grinding noises or visible damage are reasons to stop using the AC and seek qualified assistance. Do not touch wiring or refrigerant components.', 'If the outdoor unit is inaccessible or the issue continues after basic checks, avoid climbing or attempting a repair yourself.'] },
+      { heading: 'What to share when booking', paragraphs: ['Tell the service team whether the AC is a split or window model, its brand and approximate age, what you notice, and whether any error code appears. Ask the team to confirm the visit/diagnosis fee and the scope covered by the displayed ₹299 price before approving work.'] },
+    ],
+  },
+  {
+    slug: 'refrigerator-not-cooling',
+    category: 'Refrigerator care',
+    title: 'Refrigerator Not Cooling Properly: What to Check First',
+    description: 'Practical, safe first checks for a refrigerator that is warm, noisy or leaking, plus information to share with a repair technician.',
+    date: '2026-10-23',
+    readTime: '4 min read',
+    intro: 'A refrigerator that is not keeping food cold may need a simple adjustment or professional diagnosis. Avoid repeatedly opening the door while you check the basics.',
+    sections: [
+      { heading: 'Check the door and temperature setting', paragraphs: ['Make sure the door closes fully and that food packages are not preventing the seal from meeting the cabinet. Confirm the temperature setting using the manufacturer guide.', 'Allow airflow around stored food and avoid blocking internal vents. If the appliance was recently moved or powered off, follow the manufacturer instructions before judging performance.'] },
+      { heading: 'Protect food and stay safe', paragraphs: ['Move perishable food to another safe cold-storage option if the refrigerator cannot maintain temperature. If you notice a burning smell, sparks or damaged wiring, stop using the appliance and seek qualified assistance.', 'Do not attempt to open sealed refrigeration systems or handle refrigerant lines.'] },
+      { heading: 'Prepare for a service enquiry', paragraphs: ['Share the brand/model, approximate age, whether the freezer is cooling, any water leakage or unusual noise, and your locality. Ask for the inspection fee and repair estimate before authorizing parts or labour.'] },
+    ],
+  },
+  {
+    slug: 'washing-machine-not-draining',
+    category: 'Laundry care',
+    title: 'Washing Machine Not Draining? Safe Troubleshooting Tips',
+    description: 'Understand common reasons a washing machine may not drain and what details to collect before requesting service.',
+    date: '2026-10-23',
+    readTime: '3 min read',
+    intro: 'Standing water at the end of a wash cycle can be frustrating. A few safe checks may help identify whether the issue is a setting, a blocked external hose or a fault that needs service.',
+    sections: [
+      { heading: 'Pause and check the cycle', paragraphs: ['Confirm the selected programme has reached its drain or spin stage. Some cycles pause or use lower spin speeds for specific fabrics.', 'If the machine displays an error code, note it exactly. Turn the machine off before inspecting anything and follow the user manual.'] },
+      { heading: 'Inspect only accessible areas', paragraphs: ['Look for a visibly kinked drain hose without pulling the machine out unsafely. Do not open a pump filter if the manufacturer procedure is unclear; hot water or trapped objects may spill out.', 'If you notice burning smells, damaged cables or water near electrical outlets, stop using the machine and seek qualified help.'] },
+      { heading: 'Information that helps the technician', paragraphs: ['Share whether the machine is front-load or top-load, the brand/model, the error code, and whether the drum spins. Confirm any visit fee and the final estimate before approving repairs.'] },
+    ],
+  },
+  {
+    slug: 'home-appliance-maintenance-checklist',
+    category: 'Home care checklist',
+    title: 'A Simple Home Appliance Maintenance Checklist',
+    description: 'A practical checklist for caring for ACs, refrigerators, washing machines, microwaves, geysers and TVs at home.',
+    date: '2026-10-23',
+    readTime: '5 min read',
+    intro: 'Routine care can help you notice problems early. Always follow the appliance manufacturer’s manual and leave electrical, sealed-system and internal repairs to qualified professionals.',
+    sections: [
+      { heading: 'Cooling and kitchen appliances', paragraphs: ['Keep the AC filter clean as instructed by the manufacturer and keep refrigerator door seals clean. Leave appropriate ventilation space around appliances and avoid overloading sockets.', 'For microwaves, keep the interior clean and stop using the unit if it sparks, smells burnt or has a damaged door. Never remove the outer casing.'] },
+      { heading: 'Laundry and water heating', paragraphs: ['Check pockets before washing, avoid overloading the machine and use the recommended detergent amount. Look for hose wear or leakage during ordinary use.', 'Geysers combine water and electricity. If you notice leakage, a burning smell or unusual electrical behaviour, stop using the unit and contact a qualified professional. Do not attempt internal maintenance.'] },
+      { heading: 'Keep a useful appliance record', paragraphs: ['Save model numbers, purchase dates, warranty documents and any error codes. When you request a repair, describe the symptoms and ask about diagnosis fees, parts, labour and warranty terms before authorizing work.'] },
+    ],
+  },
+];
