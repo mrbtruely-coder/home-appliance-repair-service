@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 
-export default function DoorStepLogo({ size = 50, dark = false, className = '' }) {
+export default function DoorStepLogo({ size = 84, dark = false, className = '' }) {
   if (dark) {
     return (
       <div
@@ -9,22 +9,25 @@ export default function DoorStepLogo({ size = 50, dark = false, className = '' }
         style={{
           display: 'inline-flex',
           alignItems: 'center',
+          justifyContent: 'center',
           backgroundColor: '#FFFFFF',
-          padding: '6px 14px',
-          borderRadius: '12px',
-          boxShadow: '0 4px 18px rgba(0, 0, 0, 0.22)',
+          padding: '8px 16px',
+          borderRadius: '16px',
+          boxShadow: '0 6px 22px rgba(0, 0, 0, 0.25)',
           transition: 'all 0.2s ease',
+          flexShrink: 0,
         }}
       >
         <Image
           src="/logo.png"
           alt="Home Appliance Repair Services"
-          width={180}
-          height={180}
+          width={280}
+          height={280}
           className="brand-logo-img"
           style={{
             height: `${size}px`,
             width: 'auto',
+            maxHeight: '100%',
             objectFit: 'contain',
             display: 'block',
           }}
@@ -40,17 +43,20 @@ export default function DoorStepLogo({ size = 50, dark = false, className = '' }
       style={{
         display: 'inline-flex',
         alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
       }}
     >
       <Image
         src="/logo.png"
         alt="Home Appliance Repair Services"
-        width={180}
-        height={180}
+        width={280}
+        height={280}
         className="brand-logo-img"
         style={{
           height: `${size}px`,
           width: 'auto',
+          maxHeight: '100%',
           objectFit: 'contain',
           display: 'block',
         }}

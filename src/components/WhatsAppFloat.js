@@ -41,7 +41,7 @@ export default function WhatsAppFloat() {
         href={`${WHATSAPP_URL}?text=${message}`}
         target="_blank"
         rel="noreferrer"
-        aria-label="Start a WhatsApp conversation with Doorstep Service Nellore"
+        aria-label="Start a WhatsApp conversation with Doorstep Service Hyderabad"
         title="Chat on WhatsApp"
       >
         <MessageCircle size={24} strokeWidth={2.4} />

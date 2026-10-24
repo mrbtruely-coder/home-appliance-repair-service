@@ -62,22 +62,22 @@ const LOCATION_DROPDOWN_ITEMS = [
   {
     slug: 'ameerpet-main-road',
     name: 'Ameerpet Main Road',
-    desc: 'Hyderabad • Metro Station & Cross Road Hub',
+    desc: 'Hyderabad',
   },
   {
     slug: 'chanda-nagar',
     name: 'Chanda Nagar',
-    desc: 'Hyderabad • BHEL Circle & Main Road Hub',
+    desc: 'Hyderabad',
   },
   {
     slug: 'alwal',
     name: 'Alwal',
-    desc: 'Hyderabad • Alwal Hills & IG Statue Hub',
+    desc: 'Hyderabad',
   },
   {
     slug: 'suchitra',
     name: 'Suchitra',
-    desc: 'Hyderabad • Suchitra Circle & Quthbullapur',
+    desc: 'Hyderabad',
   },
 ];
 
@@ -187,7 +187,7 @@ export default function Header() {
               closeAllDropdowns();
             }}
           >
-            <DoorStepLogo size={52} />
+            <DoorStepLogo size={84} />
           </Link>
 
           {/* Desktop Navigation */}
@@ -370,7 +370,7 @@ export default function Header() {
             </Link>
 
             {/* Mobile Services Section */}
-            <div style={{ padding: '8px 0 4px', fontSize: '11px', fontWeight: 800, color: '#16A34A', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <div style={{ padding: '8px 0 4px', fontSize: '11px', fontWeight: 800, color: '#FF6B00', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Appliance Services
             </div>
             {SERVICE_DROPDOWN_ITEMS.map((item) => (
@@ -385,7 +385,7 @@ export default function Header() {
             ))}
 
             {/* Mobile Locations Section */}
-            <div style={{ padding: '12px 0 4px', fontSize: '11px', fontWeight: 800, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <div style={{ padding: '12px 0 4px', fontSize: '11px', fontWeight: 800, color: '#0A2558', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Service Hubs & Cities
             </div>
             {LOCATION_DROPDOWN_ITEMS.map((loc) => (

@@ -101,14 +101,54 @@ const APPLIANCES = [
   { id: 'tv', name: 'LED / SMART TV', icon: TvIcon },
 ];
 
+const APPLIANCE_SUBCATEGORIES = {
+  ac: [
+    { id: 'split-ac-repair', name: 'Split AC Repair', price: '₹299' },
+    { id: 'cassette-ac-repair', name: 'Cassette AC Repair', price: '₹499' },
+    { id: 'ac-installation-service', name: 'AC Installation Service', price: '₹499' },
+  ],
+  refrigerator: [
+    { id: 'single-door-fridge-repair', name: 'Single Door Fridge Repair', price: '₹299' },
+    { id: 'double-door-refrigerator', name: 'Double Door Refrigerator', price: '₹399' },
+    { id: 'side-by-side-door-refrigerator', name: 'Side by Side Door Refrigerator', price: '₹499' },
+  ],
+  'washing-machine': [
+    { id: 'front-load-washing-machine', name: 'Front Load Washing Machine', price: '₹349' },
+    { id: 'top-load-washing-machine-repair', name: 'Top Load Washing Machine Repair', price: '₹299' },
+  ],
+  oven: [
+    { id: 'convectional-oven-repair', name: 'Convectional Oven Repair', price: '₹349' },
+    { id: 'microwave-oven-repair', name: 'Microwave Oven Repair', price: '₹299' },
+  ],
+  geyser: [
+    { id: 'electric-geyser-repair', name: 'Electric Geyser Repair', price: '₹299' },
+    { id: 'instant-geyser-repair', name: 'Instant Geyser Repair', price: '₹299' },
+  ],
+  tv: [
+    { id: 'lcd-tv', name: 'LCD TV', price: '₹349' },
+    { id: 'led-tv', name: 'LED TV', price: '₹349' },
+    { id: 'smart-android-tv', name: 'Smart Android TV', price: '₹399' },
+    { id: 'tv-installation-wall-mounting', name: 'TV Installation / Wall Mounting', price: '₹299' },
+  ],
+};
+
 export default function TwoStepBookingFlow() {
   const [selectedAppliance, setSelectedAppliance] = useState('ac');
+  const [selectedSubcategory, setSelectedSubcategory] = useState('split-ac-repair');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [area, setArea] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const handleApplianceSelect = (appId) => {
+    setSelectedAppliance(appId);
+    const subcats = APPLIANCE_SUBCATEGORIES[appId] || [];
+    if (subcats.length > 0) {
+      setSelectedSubcategory(subcats[0].id);
+    }
+  };
   const [isSuccess, setIsSuccess] = useState(false);
   const [bookingRef, setBookingRef] = useState('');
   const [emailSentStatus, setEmailSentStatus] = useState(false);
@@ -164,12 +204,12 @@ export default function TwoStepBookingFlow() {
             const osmData = await osmRes.json();
             if (osmData && osmData.address) {
               const a = osmData.address;
-              foundLocality = a.suburb || a.neighbourhood || a.residential || a.city_district || a.city || a.town || 'Nellore';
+              foundLocality = a.suburb || a.neighbourhood || a.residential || a.city_district || a.city || a.town || 'Hyderabad';
               fullAddr = osmData.display_name;
             }
           }
 
-          // Check if detected locality matches any of our Nellore areas
+          // Check if detected locality matches any of our Hyderabad areas
           const matchedArea = AREAS.find(
             (item) =>
               foundLocality &&
@@ -222,6 +262,28 @@ export default function TwoStepBookingFlow() {
       const savedArea = localStorage.getItem('doorstep-area');
       if (savedArea) setArea(savedArea);
     } catch {}
+
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const srvParam = (params.get('service') || params.get('appliance') || params.get('category') || '').toLowerCase();
+      let targetApp = '';
+      if (srvParam.includes('ac')) targetApp = 'ac';
+      else if (srvParam.includes('fridge') || srvParam.includes('refrigerator')) targetApp = 'refrigerator';
+      else if (srvParam.includes('washing') || srvParam.includes('washer')) targetApp = 'washing-machine';
+      else if (srvParam.includes('oven') || srvParam.includes('microwave')) targetApp = 'oven';
+      else if (srvParam.includes('geyser') || srvParam.includes('heater')) targetApp = 'geyser';
+      else if (srvParam.includes('tv')) targetApp = 'tv';
+
+      if (targetApp && APPLIANCE_SUBCATEGORIES[targetApp]) {
+        setSelectedAppliance(targetApp);
+        const subParam = params.get('sub') || params.get('subcategory');
+        if (subParam && APPLIANCE_SUBCATEGORIES[targetApp].some((s) => s.id === subParam)) {
+          setSelectedSubcategory(subParam);
+        } else {
+          setSelectedSubcategory(APPLIANCE_SUBCATEGORIES[targetApp][0].id);
+        }
+      }
+    }
   }, []);
 
   const handleBookingSubmit = async (e) => {
@@ -254,6 +316,10 @@ export default function TwoStepBookingFlow() {
     const genId = 'DS-' + Math.floor(100000 + Math.random() * 900000);
     const appObj = APPLIANCES.find((a) => a.id === selectedAppliance);
     const applianceName = appObj?.name || 'Home Appliance Service';
+    const subcats = APPLIANCE_SUBCATEGORIES[selectedAppliance] || [];
+    const subObj = subcats.find((s) => s.id === selectedSubcategory) || subcats[0];
+    const subcategoryName = subObj?.name || '';
+    const fullServiceLabel = subcategoryName ? `${applianceName} — ${subcategoryName}` : applianceName;
 
     try {
       // Call Node.js Backend API to send confirmation email
@@ -265,7 +331,8 @@ export default function TwoStepBookingFlow() {
           name: name.trim(),
           phone: cleanPhone,
           email: email.trim(),
-          appliance: applianceName,
+          appliance: fullServiceLabel,
+          subcategory: subcategoryName,
           area: area,
         }),
       });
@@ -284,12 +351,13 @@ export default function TwoStepBookingFlow() {
         const existing = JSON.parse(localStorage.getItem('doorstep-orders') || '[]');
         existing.unshift({
           id: genId,
-          service: applianceName,
+          service: fullServiceLabel,
+          subcategory: subcategoryName,
           name: name.trim(),
           phone: cleanPhone,
           email: email.trim(),
           area: area,
-          price: SERVICE_PRICE,
+          price: subObj?.price || SERVICE_PRICE,
           status: 'Engineer Dispatched · Within 90 mins',
           emailConfirmed: Boolean(data.userEmailSent),
           createdAt: new Date().toISOString(),
@@ -331,10 +399,10 @@ export default function TwoStepBookingFlow() {
           <div className="two-step-left-content">
             <span className="free-booking-badge">FREE BOOKING</span>
             <h1 className="two-step-main-title">
-              Easy 2-Step Repair Dispatch
+              Easy Repair Dispatch
             </h1>
             <p className="two-step-instructions">
-              <strong>Simple Booking:</strong> 1. Tap the icon of your broken appliance, 2. Enter your name and mobile number.
+              <strong>Simple Booking:</strong> 1. Tap your appliance, 2. Select sub-category, 3. Enter your contact details.
             </p>
             <p className="two-step-dispatch-sub">
               A certified local engineer will arrive at your doorstep in Hyderabad within 90 minutes.
@@ -398,6 +466,12 @@ export default function TwoStepBookingFlow() {
                       <strong>{APPLIANCES.find((a) => a.id === selectedAppliance)?.name}</strong>
                     </div>
                     <div className="meta-item">
+                      <small>SUB-CATEGORY</small>
+                      <strong style={{ color: '#0A2558' }}>
+                        {(APPLIANCE_SUBCATEGORIES[selectedAppliance] || []).find((s) => s.id === selectedSubcategory)?.name || 'Standard Repair'}
+                      </strong>
+                    </div>
+                    <div className="meta-item">
                       <small>AREA</small>
                       <strong>{area || 'Hyderabad'}</strong>
                     </div>
@@ -438,7 +512,7 @@ export default function TwoStepBookingFlow() {
                             type="button"
                             key={app.id}
                             className={`appliance-tile-btn ${isSelected ? 'active' : ''}`}
-                            onClick={() => setSelectedAppliance(app.id)}
+                            onClick={() => handleApplianceSelect(app.id)}
                             aria-pressed={isSelected}
                           >
                             <div className="appliance-tile-icon">
@@ -451,8 +525,44 @@ export default function TwoStepBookingFlow() {
                     </div>
                   </div>
 
-                  {/* Step 2: Customer Details */}
+                  {/* Step 2: Choose Sub-Category */}
+                  <div className="step-section subcategory-step-section">
+                    <div className="subcat-header-row">
+                      <span className="step-label" style={{ margin: 0 }}>2. SELECT SUB-CATEGORY</span>
+                      <span className="subcat-hint">Select specific service type</span>
+                    </div>
+
+                    <div className="subcat-selection-grid">
+                      {(APPLIANCE_SUBCATEGORIES[selectedAppliance] || []).map((sub) => {
+                        const isSubActive = selectedSubcategory === sub.id;
+                        return (
+                          <button
+                            type="button"
+                            key={sub.id}
+                            className={`subcat-select-btn ${isSubActive ? 'active' : ''}`}
+                            onClick={() => setSelectedSubcategory(sub.id)}
+                            aria-pressed={isSubActive}
+                          >
+                            <div className="subcat-radio-icon">
+                              {isSubActive ? (
+                                <CheckCircle2 size={16} color="#FF6B00" strokeWidth={2.4} />
+                              ) : (
+                                <span className="subcat-unselected-circle" />
+                              )}
+                            </div>
+                            <div className="subcat-btn-inner">
+                              <span className="subcat-btn-name">{sub.name}</span>
+                              <span className="subcat-btn-price">From {sub.price}</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Step 3: Customer Details */}
                   <div className="step-section customer-details-section">
+                    <span className="step-label">3. ENTER SERVICE DETAILS</span>
                     <div className="input-fields-row">
                       <div className="input-group">
                         <label>FULL NAME</label>
@@ -499,7 +609,7 @@ export default function TwoStepBookingFlow() {
 
                     <div className="input-group" style={{ marginTop: '14px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                        <label style={{ margin: 0 }}>SERVICE LOCALITY IN NELLORE</label>
+                        <label style={{ margin: 0 }}>SERVICE LOCALITY IN HYDERABAD</label>
                         <button
                           type="button"
                           onClick={handleAutoDetectLocation}
@@ -540,7 +650,7 @@ export default function TwoStepBookingFlow() {
                           }}
                           required
                         >
-                          <option value="">Select Area in Nellore</option>
+                          <option value="">Select Area in Hyderabad</option>
                           {AREAS.map((a) => (
                             <option key={a.slug} value={a.name}>
                               {a.name}
@@ -607,7 +717,7 @@ export default function TwoStepBookingFlow() {
           </div>
           <h2 className="rapid-heading">Need Quick Appliance Repair?</h2>
           <p className="rapid-desc">
-            Don’t let a broken AC, refrigerator, or washing machine interrupt your routine. Tap below to call or chat with our Nellore technicians immediately.
+            Don’t let a broken AC, refrigerator, or washing machine interrupt your routine. Tap below to call or chat with our Hyderabad technicians immediately.
           </p>
 
           <p className="tap-icons-hint">TAP ICONS BELOW TO CONNECT WITH US DIRECTLY</p>

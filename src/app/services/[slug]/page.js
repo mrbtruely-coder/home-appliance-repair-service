@@ -1,12 +1,18 @@
 import Link from 'next/link';
-import { CheckCircle2, Phone, Sparkles, Tag, Wrench, ArrowRight } from 'lucide-react';
-import ServiceCard from '@/components/ServiceCard';
-import FAQAccordion from '@/components/FAQAccordion';
+import {
+  Check,
+  CheckCircle2,
+  Phone,
+  MessageCircle,
+  ArrowRight,
+  ArrowLeft,
+  Sparkles,
+  ShieldCheck,
+  Clock,
+  Wrench,
+} from 'lucide-react';
 import StructuredData from '@/components/StructuredData';
-import ServiceHeroButtons from '@/components/ServiceHeroButtons';
-import ServiceDetailActionBox from '@/components/ServiceDetailActionBox';
-import { SERVICES, AREAS, PHONE_E164, PHONE_DISPLAY, SERVICE_PRICE } from '@/lib/site';
-import { CATEGORY_OFFERS } from '@/lib/plansData';
+import { SERVICES, PHONE_E164, PHONE_DISPLAY, WHATSAPP_URL } from '@/lib/site';
 import { pageMetadata, serviceJsonLd } from '@/lib/seo';
 
 export function generateStaticParams() {
@@ -18,190 +24,220 @@ export async function generateMetadata({ params }) {
   const service = SERVICES.find((item) => item.slug === slug);
   if (!service) return { title: 'Service not found' };
   return pageMetadata({
-    title: `${service.name} in Hyderabad | Doorstep Services`,
-    description: `${service.description} Contact Doorstep Home Appliance Services at ${PHONE_DISPLAY}.`,
+    title: `${service.heroTagline || service.name} Hyderabad | Doorstep Services`,
+    description: `${service.heroSubtitle || service.description} Call ${PHONE_DISPLAY} for fast technician dispatch.`,
     path: `/services/${service.slug}/`,
-    keywords: [`${service.name.toLowerCase()} Hyderabad`, 'home appliance repair Hyderabad', 'Doorstep Home Appliance Services'],
+    keywords: [
+      `${service.name.toLowerCase()} Hyderabad`,
+      `${service.slug} service center`,
+      'home appliance repair Hyderabad',
+      'Doorstep Home Appliance Services',
+    ],
   });
 }
 
 export default async function ServiceDetailPage({ params }) {
   const { slug } = await params;
   const service = SERVICES.find((item) => item.slug === slug);
+
   if (!service) {
     return (
-      <section className="page-content container">
+      <section className="page-content container" style={{ padding: '80px 20px', textAlign: 'center' }}>
         <h1>Service not found</h1>
-        <Link href="/services/">Browse services</Link>
+        <p style={{ margin: '14px 0 24px', color: '#64748B' }}>
+          The requested appliance category could not be located.
+        </p>
+        <Link href="/services/" className="button button-primary">
+          Browse All Services
+        </Link>
       </section>
     );
   }
 
-  // Find active offer for this service if configured
-  const currentOffer = CATEGORY_OFFERS.find((o) => o.serviceSlug === service.slug);
-
-  const sameCategory = SERVICES.filter((item) => item.slug !== service.slug && item.category === service.category);
-  const related = [...sameCategory, ...SERVICES.filter((item) => item.slug !== service.slug && item.category !== service.category)].slice(0, 3);
+  const subcategories = service.subcategories || [];
 
   return (
     <>
       <StructuredData data={serviceJsonLd(service)} />
 
-      {/* Hero Section */}
-      <section className="page-hero service-detail-hero-enhanced">
-        <div className="container">
-          <div className="breadcrumbs">
+      {/* 1. Top Dark Navy Hero Banner with Category Pills matching Reference */}
+      <section className="srv-ref-hero-banner">
+        <div className="container text-center">
+          {/* Breadcrumbs */}
+          <div className="srv-ref-breadcrumbs">
             <Link href="/">Home</Link>
-            <span>/</span>
+            <span className="crumb-sep">&rsaquo;</span>
             <Link href="/services/">Services</Link>
-            <span>/</span>
-            <span>{service.name}</span>
+            <span className="crumb-sep">&rsaquo;</span>
+            <span className="crumb-active">{service.name}</span>
           </div>
 
-          <div className="page-heading">
-            <div className="service-hero-kicker-row">
-              <span className="eyebrow">APPLIANCE SERVICE</span>
-              {currentOffer && (
-                <span className="hero-offer-chip">
-                  <Sparkles size={13} /> {currentOffer.discount} Available
-                </span>
-              )}
-            </div>
+          <div className="srv-ref-eyebrow">
+            HYDERABAD DOORSTEP REPAIRS
+          </div>
 
-            <h1>{service.name} in Hyderabad</h1>
-            <p>{service.description}</p>
+          <h1 className="srv-ref-main-title">
+            {service.heroTagline || `${service.name} Services`}
+          </h1>
 
-            {/* Interactive Hero Action Buttons: Book Inspection + Enquire + Call */}
-            <ServiceHeroButtons service={service} offer={currentOffer} />
+          <p className="srv-ref-subtitle">
+            {service.heroSubtitle || service.description}
+          </p>
+
+          {/* Category Filter Pills Row matching Reference */}
+          <div className="srv-ref-pills-bar">
+            <Link href="/services/" className="srv-ref-pill">
+              All Categories (6)
+            </Link>
+            {SERVICES.map((cat) => {
+              const isActive = cat.slug === service.slug;
+              return (
+                <Link
+                  key={cat.slug}
+                  href={`/services/${cat.slug}/`}
+                  className={`srv-ref-pill ${isActive ? 'active' : ''}`}
+                >
+                  {cat.name}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Main Content Layout */}
-      <section className="page-content">
-        <div className="container detail-layout">
-          <div className="prose">
-            {/* Active Service Promotional Offer Banner */}
-            {currentOffer && (
-              <div className="service-offer-banner-box">
-                <div className="offer-banner-icon">
-                  <Tag size={24} />
-                </div>
-                <div className="offer-banner-details">
-                  <span className="offer-badge-tag">{currentOffer.tag} DEAL</span>
-                  <h3>{currentOffer.title} ({currentOffer.discount})</h3>
-                  <p>{currentOffer.desc}</p>
-                  <small className="offer-condition-note">{currentOffer.condition} · {currentOffer.expiry}</small>
-                </div>
-              </div>
-            )}
-
-            {/* Subcategories Showcase Section */}
-            {service.subcategories && service.subcategories.length > 0 && (
-              <div className="subcategories-section">
-                <div className="subcategories-section-header">
-                  <span className="eyebrow" style={{ color: '#16A34A' }}>AVAILABLE SUBCATEGORIES</span>
-                  <h2>{service.name} — Subcategory Services</h2>
-                  <p>Choose your specific appliance repair type below for fast same-day doorstep technician dispatch in Hyderabad:</p>
-                </div>
-
-                <div className="subcategories-grid">
-                  {service.subcategories.map((sub) => (
-                    <div key={sub.id} className="subcategory-card">
-                      <div className="subcategory-card-header">
-                        <div className="sub-icon-badge">
-                          <Wrench size={19} />
-                        </div>
-                        <div>
-                          <h3>{sub.name}</h3>
-                          <span className="sub-price-pill">From {sub.startingPrice}</span>
-                        </div>
-                      </div>
-                      <p className="sub-description">{sub.description}</p>
-                      <div className="sub-card-footer">
-                        <span className="sub-badge-warranty">✓ 90-Day Warranty</span>
-                        <Link
-                          href={`/booking/?service=${encodeURIComponent(sub.name)}`}
-                          className="sub-book-btn"
-                        >
-                          Book Now &rarr;
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <h2>Common issues to mention</h2>
-            <p>
-              When you make an enquiry or book, describing the symptoms helps the technician bring the right diagnostic tools and components:
-            </p>
-            <ul className="check-list">
-              {service.concerns.map((item) => (
-                <li key={item}>
-                  <CheckCircle2 size={18} />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-
-            <h2>What to include in your request</h2>
-            <p>
-              Share the appliance brand and model if available, what changed, any displayed error code, your locality and a convenient time. Confirm what the ₹{SERVICE_PRICE} displayed price includes, and ask about parts or any additional charges before approving work.
-            </p>
-
-            <h2>Areas listed for service</h2>
-            <p>
-              Technicians are on-call across the following residential hubs:
-            </p>
-            <ul>
-              {AREAS.map((area) => (
-                <li key={area.slug}>
-                  <Link href={`/locations/${area.slug}/`}>{area.name}, Hyderabad</Link>
-                </li>
-              ))}
-            </ul>
-
-            <h2>Preferred service slot timings</h2>
-            <p>
-              Choose convenient timings when booking your appointment:
-            </p>
-            <ul>
-              <li><strong>Morning:</strong> 9:00 AM – 12:00 PM</li>
-              <li><strong>Afternoon:</strong> 12:00 PM – 3:00 PM</li>
-              <li><strong>Evening:</strong> 3:00 PM – 6:00 PM</li>
-            </ul>
-
-            <h2>Cancellation and warranty guarantee</h2>
-            <p>
-              Call <a href={`tel:${PHONE_E164}`}>{PHONE_DISPLAY}</a> to reschedule or cancel anytime without penalties. All completed repairs carry our certified doorstep warranty.
-            </p>
-
-            <h2>Frequently asked questions about {service.name}</h2>
-            <FAQAccordion items={service.faqs} />
-          </div>
-
-          {/* Sticky Aside Panel with Instant Book, Offers & Coupons */}
-          <aside className="sticky-panel">
-            <ServiceDetailActionBox service={service} offer={currentOffer} />
-          </aside>
-        </div>
-      </section>
-
-      {/* Related Services */}
-      <section className="section-white">
+      {/* 2. Main Body Content (on #F8FAFC) */}
+      <section className="srv-ref-body-section">
         <div className="container">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">RELATED SERVICES</span>
-              <h2>{service.category} services to explore</h2>
+          {/* Back button */}
+          <div className="srv-ref-back-wrap">
+            <Link href="/services/" className="btn-ref-back">
+              <ArrowLeft size={16} />
+              <span>Back to All Appliance Categories</span>
+            </Link>
+          </div>
+
+          {/* Subcategories Showcase Overview Box */}
+          <div className="srv-ref-overview-card">
+            <div className="overview-card-left">
+              <div className="overview-badge-pill">
+                <Sparkles size={13} />
+                <span>SAME-DAY FIX</span>
+              </div>
+
+              <h2 className="overview-card-title">
+                {service.name} Subcategories
+              </h2>
+
+              <p className="overview-card-desc">
+                Select your exact {service.name.toLowerCase()} type below. Our doorstep technicians carry original brand spare parts, certified multimeters, and pressure tools.
+              </p>
+
+              <div className="overview-trust-row">
+                <div className="trust-check-item">
+                  <Check size={16} strokeWidth={3} className="trust-check-icon" />
+                  <span>90-Day Warranty</span>
+                </div>
+                <div className="trust-check-item">
+                  <Check size={16} strokeWidth={3} className="trust-check-icon" />
+                  <span>Genuine OEM Spares</span>
+                </div>
+                <div className="trust-check-item">
+                  <Check size={16} strokeWidth={3} className="trust-check-icon" />
+                  <span>Arrival in 90 Mins</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="overview-card-right">
+              <img
+                src={service.image || '/hero-technician.jpg'}
+                alt={`${service.name} technician servicing appliance in Hyderabad`}
+                className="overview-tech-img"
+              />
             </div>
           </div>
-          <div className="service-grid">
-            {related.map((item) => (
-              <ServiceCard key={item.slug} service={item} compact />
+
+          {/* Subcategory Cards Section Header */}
+          <div className="srv-ref-section-heading">
+            <h2>Available Subcategory Services ({subcategories.length})</h2>
+          </div>
+
+          {/* Subcategory Cards Grid */}
+          <div
+            className={`srv-ref-cards-grid ${
+              subcategories.length === 2
+                ? 'grid-2col'
+                : subcategories.length === 3
+                ? 'grid-3col'
+                : 'grid-4col'
+            }`}
+          >
+            {subcategories.map((sub) => (
+              <div key={sub.id} className="srv-ref-card">
+                {/* Subcategory Badge */}
+                <div className="srv-card-top-badge">
+                  <span className="badge-tag-pill">{sub.badge || 'Expert Fix'}</span>
+                </div>
+
+                <h3 className="srv-card-title">{sub.name}</h3>
+
+                <p className="srv-card-desc">{sub.description}</p>
+
+                {/* Common Problems Solved List */}
+                <div className="srv-card-problems-box">
+                  <span className="problems-header-label">COMMON PROBLEMS SOLVED:</span>
+                  <ul className="problems-list">
+                    {(sub.commonProblems || service.concerns || []).slice(0, 4).map((prob, idx) => (
+                      <li key={idx}>
+                        <Check size={14} strokeWidth={2.6} className="problem-check-icon" />
+                        <span>{prob}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Bottom Pricing & Booking Action */}
+                <div className="srv-card-bottom">
+                  <div className="srv-price-meta-row">
+                    <div className="price-block">
+                      <span className="price-label">INSPECTION CHARGE</span>
+                      <strong className="price-value">From {sub.startingPrice} Diagnostic Fee</strong>
+                    </div>
+                    <span className="adjusted-bill-tag">Adjusted in Bill</span>
+                  </div>
+
+                  <Link
+                    href={`/booking/?service=${service.slug}&sub=${sub.id}`}
+                    className="btn-srv-book-now"
+                  >
+                    <span>Book {sub.name}</span>
+                    <ArrowRight size={15} />
+                  </Link>
+                </div>
+              </div>
             ))}
+          </div>
+
+          {/* Bottom Direct Assistance Strip matching Reference */}
+          <div className="srv-ref-help-strip">
+            <span className="help-strip-text">Need help selecting the right service?</span>
+            <div className="help-strip-actions">
+              <a href={`tel:${PHONE_E164}`} className="btn-help-call">
+                <Phone size={16} />
+                <span>Call: +{PHONE_DISPLAY}</span>
+              </a>
+              <a
+                href={`${WHATSAPP_URL}?text=${encodeURIComponent(
+                  `Hello Doorstep Service Hyderabad, I need assistance selecting the right repair service for my ${service.name}.`
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-help-wa"
+              >
+                <MessageCircle size={16} />
+                <span>Chat on WhatsApp</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>

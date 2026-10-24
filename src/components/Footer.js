@@ -13,7 +13,7 @@ export default function Footer() {
         {/* Brand Column */}
         <div className="footer-brand-col">
           <Link href="/" className="footer-logo-link" aria-label="Home Appliance Repair Services Hyderabad">
-            <DoorStepLogo dark={true} size={48} />
+            <DoorStepLogo dark={true} size={84} />
           </Link>
           <p className="footer-about-text">
             Door Step Service is Hyderabad&apos;s premium appliance repair and maintenance company. We specialize in fast AC, Refrigerator, Washing Machine, Microwave, Geyser, and TV diagnostics right at your home.
@@ -85,21 +85,39 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Service Locations (Hyderabad Only) */}
+        {/* Service Locations (Hyderabad Hubs & Localities) */}
         <div className="footer-nav-col">
           <h3 className="footer-nav-heading">SERVICE LOCATIONS</h3>
           <ul className="footer-links-list">
             <li>
-              <Link href="/booking/?area=Ameerpet+Main+Road">Ameerpet Main Road</Link>
+              <Link href="/service-center/ameerpet-main-road/">
+                Ameerpet &amp; SR Nagar (Hyderabad)
+              </Link>
             </li>
             <li>
-              <Link href="/booking/?area=Chanda+Nagar">Chanda Nagar</Link>
+              <Link href="/service-center/ameerpet-main-road/">
+                Panjagutta &amp; Somajiguda (Hyderabad)
+              </Link>
             </li>
             <li>
-              <Link href="/booking/?area=Alwal">Alwal</Link>
+              <Link href="/service-center/chanda-nagar/">
+                Chanda Nagar &amp; Madinaguda (Hyderabad)
+              </Link>
             </li>
             <li>
-              <Link href="/booking/?area=Suchitra">Suchitra</Link>
+              <Link href="/service-center/chanda-nagar/">
+                Miyapur &amp; Hafeezpet (Hyderabad)
+              </Link>
+            </li>
+            <li>
+              <Link href="/service-center/alwal/">
+                Old Alwal &amp; Lothkunta (Hyderabad)
+              </Link>
+            </li>
+            <li>
+              <Link href="/service-center/suchitra/">
+                Suchitra Circle &amp; Kompally (Hyderabad)
+              </Link>
             </li>
           </ul>
         </div>

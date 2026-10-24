@@ -206,7 +206,7 @@ export default async function ServiceCenterDetailPage({ params }) {
 
           {/* 10 KM Radius Protection Guarantee Strip */}
           <div className="loc-radius-guarantee-strip">
-            <MapPin size={22} style={{ flexShrink: 0, color: '#0284C7' }} />
+            <MapPin size={22} style={{ flexShrink: 0, color: '#FF6B00' }} />
             <div>
               <strong>10 KM Radius Protection Guarantee:</strong> Even if your exact house, street or gated apartment society is not listed above, our mobile team covers all residential locations within a 10 KM radial perimeter from our {area.name} central dispatch hub.
             </div>

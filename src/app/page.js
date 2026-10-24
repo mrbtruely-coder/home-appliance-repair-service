@@ -86,7 +86,7 @@ const STANDARDS = [
   {
     icon: Clock,
     title: '90-Min Arrival',
-    desc: 'Rapid doorstep dispatch across Nellore. Certified engineers arrive with full toolkit ready to inspect.',
+    desc: 'Rapid doorstep dispatch across Hyderabad. Certified engineers arrive with full toolkit ready to inspect.',
   },
   {
     icon: Award,
@@ -222,7 +222,7 @@ export default function NewHomePage() {
             <div className="technician-card-frame">
               <img
                 src="/hero-technician.jpg"
-                alt="Expert Doorstep Technician servicing appliance in Nellore"
+                alt="Expert Doorstep Technician servicing appliance in Hyderabad"
                 className="technician-frame-img"
               />
             </div>
@@ -232,7 +232,7 @@ export default function NewHomePage() {
           <div className="clean-hero-content-col">
             <div className="hero-pill-badge">
               <span className="pill-dot" />
-              <span>TOP-RATED APPLIANCE CARE IN NELLORE</span>
+              <span>TOP-RATED APPLIANCE CARE IN HYDERABAD</span>
             </div>
 
             <h1 className="hero-clean-title">
@@ -306,7 +306,7 @@ export default function NewHomePage() {
         <div className="container">
           <div className="section-center-header">
             <span className="section-kicker-pill">EXPERT REPAIRS</span>
-            <h2 className="section-clean-heading">Our Appliance Services in Nellore</h2>
+            <h2 className="section-clean-heading">Our Appliance Services in Hyderabad</h2>
             <p className="section-clean-sub">
               Certified repairs for AC, Refrigerator, Washing Machine, Microwave Oven, Geyser, and Smart TV.
             </p>
@@ -344,7 +344,7 @@ export default function NewHomePage() {
             <span className="section-kicker-pill">WHY CHOOSE US</span>
             <h2 className="section-clean-heading">Redefining Appliance Service Standards</h2>
             <p className="section-clean-sub">
-              Setting the benchmark for transparent pricing, punctual arrivals, and quality multi-brand repairs in Nellore.
+              Setting the benchmark for transparent pricing, punctual arrivals, and quality multi-brand repairs in Hyderabad.
             </p>
           </div>
 
@@ -374,7 +374,7 @@ export default function NewHomePage() {
             <span className="section-kicker-pill">HOW IT WORKS</span>
             <h2 className="section-clean-heading">Our Simple &amp; Seamless Journey</h2>
             <p className="section-clean-sub">
-              Fast, hassle-free doorstep diagnosis and repair right at your comfort in Nellore.
+              Fast, hassle-free doorstep diagnosis and repair right at your comfort in Hyderabad.
             </p>
           </div>
 
@@ -400,7 +400,7 @@ export default function NewHomePage() {
         <div className="container">
           <div className="section-center-header">
             <span className="section-kicker-pill">CLIENT TESTIMONIALS</span>
-            <h2 className="section-clean-heading">What Our Nellore Clients Say</h2>
+            <h2 className="section-clean-heading">What Our Hyderabad Clients Say</h2>
             <p className="section-clean-sub">
               Real feedback from local residents who trust us for their home appliance repairs.
             </p>
@@ -475,7 +475,7 @@ export default function NewHomePage() {
             <span className="section-kicker-pill">FAQS</span>
             <h2 className="section-clean-heading">Frequently Asked Questions</h2>
             <p className="section-clean-sub">
-              Everything you need to know about our doorstep repair process in Nellore.
+              Everything you need to know about our doorstep repair process in Hyderabad.
             </p>
           </div>
 

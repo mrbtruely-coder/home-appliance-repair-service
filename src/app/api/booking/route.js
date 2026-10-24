@@ -30,7 +30,7 @@ function generateCustomerEmailHtml({ bookingRef, name, phone, email, appliance, 
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Service Booking Confirmed - Doorstep Service Nellore</title>
+  <title>Service Booking Confirmed - Doorstep Service Hyderabad</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 24px; color: #0f172a; }
     .email-wrapper { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
@@ -56,7 +56,7 @@ function generateCustomerEmailHtml({ bookingRef, name, phone, email, appliance, 
 <body>
   <div class="email-wrapper">
     <div class="header">
-      <span class="brand-tag">Doorstep Service Nellore</span>
+      <span class="brand-tag">Doorstep Service Hyderabad</span>
       <h1>Repair Technician Dispatched!</h1>
     </div>
     <div class="content">
@@ -66,7 +66,7 @@ function generateCustomerEmailHtml({ bookingRef, name, phone, email, appliance, 
 
       <p class="hero-text">
         Dear <strong>${name}</strong>,<br>
-        Thank you for choosing <strong>Doorstep Service</strong>. Your service request has been logged successfully, and an expert local technician is being dispatched to your location in <strong>${area}, Nellore</strong>.
+        Thank you for choosing <strong>Doorstep Service</strong>. Your service request has been logged successfully, and an expert local technician is being dispatched to your location in <strong>${area}, Hyderabad</strong>.
       </p>
 
       <div class="details-box">
@@ -89,7 +89,7 @@ function generateCustomerEmailHtml({ bookingRef, name, phone, email, appliance, 
           </tr>
           <tr>
             <td style="padding: 9px 0; color: #64748b; font-size: 14px; border-top: 1px solid #f1f5f9;">Location:</td>
-            <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #0f172a; font-size: 14px; border-top: 1px solid #f1f5f9;">${area}, Nellore</td>
+            <td style="padding: 9px 0; text-align: right; font-weight: 600; color: #0f172a; font-size: 14px; border-top: 1px solid #f1f5f9;">${area}, Hyderabad</td>
           </tr>
           <tr>
             <td style="padding: 9px 0; color: #64748b; font-size: 14px; border-top: 1px solid #f1f5f9;">Booking Fee:</td>
@@ -164,7 +164,7 @@ export async function POST(request) {
         });
 
         await transporter.sendMail({
-          from: `"Doorstep Service Nellore" <${fromAddress}>`,
+          from: `"Doorstep Service Hyderabad" <${fromAddress}>`,
           to: email.trim(),
           replyTo: helpdeskEmail,
           subject: `✓ Service Dispatched: ${appliance || 'Appliance Repair'} [${bookingRef}] - Doorstep Service`,
@@ -183,7 +183,7 @@ export async function POST(request) {
         from: `"Doorstep Bookings" <${fromAddress}>`,
         to: helpdeskEmail,
         subject: `[NEW BOOKING] ${bookingRef} - ${appliance} in ${area} (${name})`,
-        text: `New Service Booking Received:\n\nReference: ${bookingRef}\nCustomer: ${name}\nPhone: ${phone}\nEmail: ${email || 'Not provided'}\nAppliance: ${appliance}\nArea: ${area}, Nellore\nTime: ${dateStr}\nExpected Arrival: Within 90 minutes\n`,
+        text: `New Service Booking Received:\n\nReference: ${bookingRef}\nCustomer: ${name}\nPhone: ${phone}\nEmail: ${email || 'Not provided'}\nAppliance: ${appliance}\nArea: ${area}, Hyderabad\nTime: ${dateStr}\nExpected Arrival: Within 90 minutes\n`,
         html: `
           <div style="font-family: sans-serif; padding: 20px; line-height: 1.5;">
             <h2 style="color: #1d4ed8;">New Service Booking Logged</h2>
@@ -192,7 +192,7 @@ export async function POST(request) {
             <p><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></p>
             <p><strong>Email:</strong> ${email || 'N/A'}</p>
             <p><strong>Appliance:</strong> ${appliance}</p>
-            <p><strong>Area:</strong> ${area}, Nellore</p>
+            <p><strong>Area:</strong> ${area}, Hyderabad</p>
             <p><strong>Timestamp:</strong> ${dateStr}</p>
             <p style="background: #eff6ff; padding: 12px; border-radius: 8px;"><strong>Status:</strong> Technician dispatch requested (within 90 minutes)</p>
           </div>
