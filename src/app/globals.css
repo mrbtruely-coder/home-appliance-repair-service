@@ -6462,6 +6462,235 @@
   background: #22C55E;
 }
 
+/* ==========================================================================
+   Location Detail Page & 10 KM Radius Highlights
+   ========================================================================== */
+.location-radius-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1D4ED8;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  margin-top: 10px;
+}
+
+.location-radius-banner {
+  background: linear-gradient(135deg, #0A2558 0%, #153E8A 100%);
+  border-radius: 20px;
+  padding: 28px 32px;
+  color: #FFFFFF;
+  margin-bottom: 36px;
+  box-shadow: 0 16px 36px rgba(10, 37, 88, 0.14);
+}
+
+.radius-badge-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #86EFAC;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.location-radius-banner h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 10px;
+  color: #FFFFFF;
+}
+
+.location-radius-banner p {
+  font-size: 14px;
+  color: #E2E8F0;
+  line-height: 1.65;
+  margin: 0 0 18px;
+  max-width: 720px;
+}
+
+.location-landmarks-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.landmarks-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #CBD5E1;
+}
+
+.landmarks-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.landmark-chip {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.location-categories-section {
+  margin-bottom: 40px;
+}
+
+.location-categories-section h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0A2558;
+  margin: 0 0 8px;
+}
+
+.location-categories-section > p {
+  color: #64748B;
+  font-size: 14.5px;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.location-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.location-category-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.location-category-card:hover {
+  transform: translateY(-4px);
+  border-color: #22C55E;
+  box-shadow: 0 14px 32px rgba(10, 37, 88, 0.1);
+}
+
+.location-cat-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  background: #0A2558;
+}
+
+.location-cat-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.location-category-card:hover .location-cat-img {
+  transform: scale(1.05);
+}
+
+.location-cat-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(10, 37, 88, 0.88);
+  backdrop-filter: blur(6px);
+  color: #FFFFFF;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.location-cat-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.location-cat-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0A2558;
+  margin: 0 0 6px;
+}
+
+.location-cat-desc {
+  font-size: 12.5px;
+  color: #64748B;
+  line-height: 1.55;
+  margin: 0 0 12px;
+}
+
+.location-sub-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.location-sub-pill {
+  background: #F1F5F9;
+  color: #334155;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+}
+
+.location-cat-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.location-cat-price {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0A2558;
+}
+
+.location-cat-btn {
+  padding: 7px 12px;
+  font-size: 11.5px;
+  font-weight: 800;
+  background: #0A2558;
+  color: #FFFFFF;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.location-cat-btn:hover {
+  background: #22C55E;
+}
+
 
 
 

@@ -14,26 +14,30 @@ export const AREAS = [
   {
     slug: 'ameerpet-main-road',
     name: 'Ameerpet Main Road',
-    description: 'Same-day doorstep appliance repair enquiries in Ameerpet Main Road, Hyderabad.',
-    landmarks: ['Ameerpet Cross Road', 'Metro Station'],
+    radius: '10 km',
+    description: 'Same-day doorstep appliance repair enquiries across Ameerpet Main Road and all surrounding colonies within a 10 km radius.',
+    landmarks: ['Ameerpet Cross Road', 'Metro Station', 'SR Nagar', 'Panjagutta', 'Dharam Karam Road', 'Balkampet'],
   },
   {
     slug: 'chanda-nagar',
     name: 'Chanda Nagar',
-    description: 'Expert doorstep appliance repair in Chanda Nagar, Hyderabad.',
-    landmarks: ['Chanda Nagar Main Road', 'BHEL Circle'],
+    radius: '10 km',
+    description: 'Expert doorstep appliance repair in Chanda Nagar and nearby residential hubs within a 10 km radius.',
+    landmarks: ['Chanda Nagar Main Road', 'BHEL Circle', 'Madinaguda', 'Gangaram', 'Miyapur', 'Hafeezpet'],
   },
   {
     slug: 'alwal',
     name: 'Alwal',
-    description: 'Fast home appliance repairs in Alwal, Hyderabad.',
-    landmarks: ['Alwal Hills', 'IG Statue'],
+    radius: '10 km',
+    description: 'Fast home appliance repairs in Alwal and adjacent localities within a 10 km radius.',
+    landmarks: ['Alwal Hills', 'IG Statue', 'Old Alwal', 'Lothkunta', 'Bolarum', 'Trimulgherry'],
   },
   {
     slug: 'suchitra',
     name: 'Suchitra',
-    description: 'Certified appliance technician dispatch in Suchitra, Hyderabad.',
-    landmarks: ['Suchitra Circle', 'Quthbullapur'],
+    radius: '10 km',
+    description: 'Certified appliance technician dispatch in Suchitra and neighboring neighborhoods within a 10 km radius.',
+    landmarks: ['Suchitra Circle', 'Quthbullapur', 'Jeedimetla', 'Kompally', 'Petbasheerabad', 'Bowenpally'],
   },
 ];
 export const SERVICES = [
