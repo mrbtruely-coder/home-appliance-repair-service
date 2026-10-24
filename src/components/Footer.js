@@ -12,8 +12,8 @@ export default function Footer() {
       <div className="container footer-main-grid">
         {/* Brand Column */}
         <div className="footer-brand-col">
-          <Link href="/" className="footer-logo-link" aria-label="Door Step Service Hyderabad">
-            <DoorStepLogo dark={true} />
+          <Link href="/" className="footer-logo-link" aria-label="Home Appliance Repair Services Hyderabad">
+            <DoorStepLogo dark={true} size={48} />
           </Link>
           <p className="footer-about-text">
             Door Step Service is Hyderabad&apos;s premium appliance repair and maintenance company. We specialize in fast AC, Refrigerator, Washing Machine, Microwave, Geyser, and TV diagnostics right at your home.

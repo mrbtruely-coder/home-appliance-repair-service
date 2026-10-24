@@ -34,10 +34,10 @@ export default function Header() {
           <Link
             href="/"
             className="brand header-brand-link"
-            aria-label="Door Step Service Hyderabad"
+            aria-label="Home Appliance Repair Services Hyderabad"
             onClick={() => setOpen(false)}
           >
-            <DoorStepLogo />
+            <DoorStepLogo size={52} />
           </Link>
 
           {/* Desktop Navigation */}
