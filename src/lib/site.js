@@ -44,6 +44,27 @@ export const SERVICES = [
     short: 'Help with cooling problems, unusual noise, servicing enquiries and fault diagnosis.',
     description: 'Request AC service or repair in selected Hyderabad areas. Share the AC type, brand, model and symptoms so service availability and the next steps can be discussed.',
     icon: 'snowflake',
+    image: '/service_ac.jpg',
+    subcategories: [
+      {
+        id: 'ac-installation-service',
+        name: 'AC Installation Service',
+        description: 'Professional uninstallation & new installation with copper pipe routing, pressure leak test, and vacuum check.',
+        startingPrice: '₹799',
+      },
+      {
+        id: 'cassette-ac-repair',
+        name: 'Cassette AC Repair',
+        description: 'Ceiling cassette AC diagnosis, jet wash service, fan blower motor repair, and commercial unit maintenance.',
+        startingPrice: '₹499',
+      },
+      {
+        id: 'split-ac-repair',
+        name: 'Split AC Repair',
+        description: 'Complete split AC cooling coils jet wash, PCB board repair, refrigerant gas leak fixing, and capacitor replacement.',
+        startingPrice: '₹299',
+      },
+    ],
     concerns: ['AC not cooling as expected', 'Unusual sounds or smells', 'Water dripping from the indoor unit', 'Remote or control issues'],
     faqs: [
       { q: 'What details should I share for AC repair?', a: 'Share the AC type, brand/model, symptoms and your service area. If there is a burning smell or suspected electrical fault, switch the unit off and seek qualified assistance.' },
@@ -57,6 +78,27 @@ export const SERVICES = [
     short: 'Help with cooling concerns, leakage, noise and general troubleshooting.',
     description: 'Request refrigerator repair in selected Hyderabad areas. Provide the brand, model and symptoms to help the team discuss availability and an estimate.',
     icon: 'refrigerator',
+    image: '/service_fridge.jpg',
+    subcategories: [
+      {
+        id: 'double-door-refrigerator',
+        name: 'Double Door Refrigerator',
+        description: 'Frost-free double door defrost sensor, heating coil, airflow damper, and compressor relay repair.',
+        startingPrice: '₹399',
+      },
+      {
+        id: 'side-by-side-door-refrigerator',
+        name: 'Side by Side Door Refrigerator',
+        description: 'Multi-door inverter refrigerator PCB diagnostics, dual evaporators, ice maker, and inverter compressor repair.',
+        startingPrice: '₹499',
+      },
+      {
+        id: 'single-door-fridge-repair',
+        name: 'Single Door Fridge Repair',
+        description: 'Direct cool single door cooling fault, ice choke, thermostat knob, door gasket seal, and gas refilling.',
+        startingPrice: '₹299',
+      },
+    ],
     concerns: ['Not cooling properly', 'Water leakage', 'Unusual sounds', 'Door seal or temperature concerns'],
     faqs: [
       { q: 'What should I tell you about my refrigerator?', a: 'Share the brand/model, approximate age if known, symptoms and service locality.' },
@@ -70,6 +112,21 @@ export const SERVICES = [
     short: 'Help with drainage, spin-cycle, vibration and washing performance issues.',
     description: 'Request washing machine service or repair in selected Hyderabad areas. Include the machine type, brand, model and any displayed error code.',
     icon: 'washing-machine',
+    image: '/service_washing_machine.jpg',
+    subcategories: [
+      {
+        id: 'front-load-washing-machine',
+        name: 'Front Load Washing Machine',
+        description: 'Front loader spider arm & drum bearing replacement, door rubber seal leak, suspension shocks, and drain motor fixes.',
+        startingPrice: '₹349',
+      },
+      {
+        id: 'top-load-washing-machine-repair',
+        name: 'Top Load Washing Machine Repair',
+        description: 'Top loader pulsator, clutch gearbox, inlet solenoid valve, unbalance spin sensor, and drain pump calibration.',
+        startingPrice: '₹299',
+      },
+    ],
     concerns: ['Water not draining', 'Spin cycle not working', 'Excessive vibration', 'Error codes or cycle interruptions'],
     faqs: [
       { q: 'Can I share an error code?', a: 'Yes. Include the exact error code and model number in your booking message if available.' },
@@ -83,6 +140,21 @@ export const SERVICES = [
     short: 'Help with heating concerns, control faults and safe appliance diagnosis.',
     description: 'Request oven or microwave repair in selected Hyderabad areas. Share the appliance type, model and reported issue before arranging service.',
     icon: 'microwave',
+    image: '/service_oven.jpg',
+    subcategories: [
+      {
+        id: 'convectional-oven-repair',
+        name: 'Convectional Oven Repair',
+        description: 'Baking and roasting heating element replacement, thermostat sensor, circulation blower fan, and door hinge repair.',
+        startingPrice: '₹349',
+      },
+      {
+        id: 'microwave-oven-repair',
+        name: 'Microwave Oven Repair',
+        description: 'Precision magnetron tube replacement, high voltage diode/capacitor, touchpad keypad membrane, and spark fix.',
+        startingPrice: '₹299',
+      },
+    ],
     concerns: ['Not heating as expected', 'Control panel concerns', 'Turntable or door issues', 'Unusual sounds or error displays'],
     faqs: [
       { q: 'Can I use a microwave that sparks?', a: 'Stop using it until it has been inspected. Do not attempt internal repairs yourself.' },
@@ -96,6 +168,21 @@ export const SERVICES = [
     short: 'Help with water-heating issues, leaks and thermostat or element concerns.',
     description: 'Request geyser service in selected Hyderabad areas. Because water heaters combine water and electricity, suspected faults should be handled by a qualified technician.',
     icon: 'geyser',
+    image: '/service_geyser.jpg',
+    subcategories: [
+      {
+        id: 'electric-geyser-repair',
+        name: 'Electric Geyser Repair',
+        description: 'Heavy duty copper heating element replacement, thermal cutout thermostat, anti-scaling tank cleaning, and leak sealing.',
+        startingPrice: '₹299',
+      },
+      {
+        id: 'instant-geyser-repair',
+        name: 'Instant Geyser Repair',
+        description: 'Instant water heater pressure switch calibration, quick-heating coil replacement, power trip diagnostics, and inlet valve fixes.',
+        startingPrice: '₹299',
+      },
+    ],
     concerns: ['Water not heating', 'Water leakage', 'Unexpected shutdowns', 'Temperature-control concerns'],
     faqs: [
       { q: 'What if my geyser is leaking?', a: 'Turn it off and isolate water/electricity only if you can do so safely, then contact a qualified professional.' },
@@ -109,6 +196,33 @@ export const SERVICES = [
     short: 'Help with display, sound, power and connectivity troubleshooting.',
     description: 'Request TV repair in selected Hyderabad areas. Share the TV type, brand, model and symptoms so availability can be confirmed.',
     icon: 'tv',
+    image: '/service_tv.jpg',
+    subcategories: [
+      {
+        id: 'lcd-tv',
+        name: 'LCD TV',
+        description: 'LCD CCFL backlight inverter repair, power card filter capacitor replacement, and display flickering troubleshooting.',
+        startingPrice: '₹349',
+      },
+      {
+        id: 'led-tv',
+        name: 'LED TV',
+        description: 'Direct & edge-lit LED backlight strip change, sound but no picture fix, and power board diagnostic repair.',
+        startingPrice: '₹349',
+      },
+      {
+        id: 'smart-android-tv',
+        name: 'Smart Android TV',
+        description: 'Android smart motherboard troubleshooting, firmware bootloop fix, Wi-Fi module repair, and 4K display calibration.',
+        startingPrice: '₹399',
+      },
+      {
+        id: 'tv-installation-wall-mounting',
+        name: 'TV Installation / Wall Mounting',
+        description: 'Heavy-gauge fixed, tilt, or full-motion swivel wall bracket installation with concrete anchors and cable concealment.',
+        startingPrice: '₹299',
+      },
+    ],
     concerns: ['TV not powering on', 'Picture or display problems', 'Sound issues', 'Connectivity or input problems'],
     faqs: [
       { q: 'What TV details should I provide?', a: 'Share the brand/model, screen type if known, symptoms and whether any indicator light appears.' },

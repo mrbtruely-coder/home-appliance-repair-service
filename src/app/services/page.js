@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Check } from 'lucide-react';
+import { Check, ArrowRight } from 'lucide-react';
 import { pageMetadata } from '@/lib/seo';
+import { SERVICES } from '@/lib/site';
 
 export const metadata = pageMetadata({
   title: 'Home Appliance Repair Services in Hyderabad | Doorstep Service',
@@ -9,93 +10,6 @@ export const metadata = pageMetadata({
   path: '/services/',
   keywords: ['home appliance repair Hyderabad', 'AC repair Hyderabad', 'refrigerator repair Hyderabad', 'washing machine repair Hyderabad'],
 });
-
-const SERVICES_CATALOG = [
-  {
-    slug: 'ac-repair',
-    name: 'AC Service & Repair',
-    badge: 'Verified Job',
-    image: '/service_ac.jpg',
-    description: 'Expert diagnostics, cooling coils restoration, gas leakage plugging, and high-pressure jet wash wet servicing.',
-    features: [
-      'Complete split AC deep jet wash service',
-      'Refrigerant gas charging & leak fix',
-      'PC Board (PCB) troubleshooting',
-    ],
-    startingPrice: '₹299',
-    featured: false,
-  },
-  {
-    slug: 'refrigerator-repair',
-    name: 'Refrigerator Repair',
-    badge: 'Verified Job',
-    image: '/service_fridge.jpg',
-    description: 'Single-door, double-door, and side-by-side low cooling diagnostics, compressor fittings, and defrost sensor repairs.',
-    features: [
-      'Defrost heater & sensor repair',
-      'Compressor fittings & gas refilling',
-      'Thermostat testing & gaskets check',
-    ],
-    startingPrice: '₹399',
-    featured: true, // Highlights with blue/navy theme matching user reference
-  },
-  {
-    slug: 'washing-machine-repair',
-    name: 'Washing Machine Repair',
-    badge: 'Verified Job',
-    image: '/service_washing_machine.jpg',
-    description: 'Drum replacements, spin-cycle issues, motor repairs, intake pump issues, and extreme noise calibrations.',
-    features: [
-      'Spin drum & structural bearings repair',
-      'Water intake and drain pump fixes',
-      'Suspension struts & noise calibration',
-    ],
-    startingPrice: '₹349',
-    featured: false,
-  },
-  {
-    slug: 'oven-microwave-repair',
-    name: 'Oven & Microwave Repair',
-    badge: 'Verified Job',
-    image: '/service_oven.jpg',
-    description: 'Precision magnetron replacements, keypad touchpad sensor repairs, turntable drive fixes, and spark suppression.',
-    features: [
-      'Magnetron & high voltage diode test',
-      'Touch capacitive panel & timer fix',
-      'Turntable motor & mica sheet replacement',
-    ],
-    startingPrice: '₹299',
-    featured: false,
-  },
-  {
-    slug: 'geyser-repair',
-    name: 'Geyser & Water Heater Repair',
-    badge: 'Verified Job',
-    image: '/service_geyser.jpg',
-    description: 'Heating element replacements, thermostat resets, pressure relief valve replacements, and copper tank leak seals.',
-    features: [
-      'Heavy-duty copper heating coil change',
-      'Thermostat & auto-cutoff replacement',
-      'Anti-scaling & tank leak sealing',
-    ],
-    startingPrice: '₹299',
-    featured: false,
-  },
-  {
-    slug: 'tv-repair',
-    name: 'LED & Smart TV Repair',
-    badge: 'Verified Job',
-    image: '/service_tv.jpg',
-    description: 'Backlight strip replacements, main motherboard diagnostic repair, power card faults, and audio display issues.',
-    features: [
-      'LED backlight replacement & fix',
-      'Motherboard & power supply module repairs',
-      'Sound card & connectivity calibration',
-    ],
-    startingPrice: '₹349',
-    featured: false,
-  },
-];
 
 export default function ServicesPage() {
   return (
@@ -113,17 +27,21 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Services Grid matching exact design reference */}
+      {/* Categories Showcase Grid */}
       <section className="services-catalog-body">
         <div className="container">
           <div className="services-showcase-catalog-grid">
-            {SERVICES_CATALOG.map((item) => (
+            {SERVICES.map((item) => (
               <div
                 key={item.slug}
-                className={`catalog-service-card ${item.featured ? 'is-featured-card' : ''}`}
+                className="catalog-service-card"
               >
-                {/* Photo with Verified Job Badge */}
-                <div className="catalog-image-wrap">
+                {/* Photo with Verified Job Badge — Click navigates to subcategories */}
+                <Link
+                  href={`/services/${item.slug}/`}
+                  className="catalog-image-wrap"
+                  aria-label={`View subcategories for ${item.name}`}
+                >
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -133,23 +51,39 @@ export default function ServicesPage() {
                     priority
                   />
                   <div className="catalog-badge-pill">
-                    {item.badge}
+                    Verified Job
                   </div>
-                </div>
+                </Link>
 
                 {/* Card Content */}
                 <div className="catalog-card-content">
-                  <h3 className={`catalog-card-title ${item.featured ? 'featured-title' : ''}`}>
-                    {item.name}
+                  <h3 className="catalog-card-title">
+                    <Link href={`/services/${item.slug}/`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                      {item.name}
+                    </Link>
                   </h3>
 
                   <p className="catalog-card-desc">
                     {item.description}
                   </p>
 
-                  {/* Bullet features with green check */}
+                  {/* Subcategories list pills */}
+                  {item.subcategories && item.subcategories.length > 0 && (
+                    <div className="catalog-subcategories-wrap">
+                      <span className="subcategories-label">Included Subcategories:</span>
+                      <div className="subcategories-chips">
+                        {item.subcategories.map((sub) => (
+                          <span key={sub.id} className="sub-chip">
+                            {sub.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Bullet features */}
                   <ul className="catalog-features-list">
-                    {item.features.map((feat, idx) => (
+                    {item.concerns?.slice(0, 3).map((feat, idx) => (
                       <li key={idx}>
                         <span className="green-check-icon">
                           <Check size={14} strokeWidth={2.8} />
@@ -159,18 +93,19 @@ export default function ServicesPage() {
                     ))}
                   </ul>
 
-                  {/* Bottom Row: Diagnostics Starting Price & Book Service Button */}
+                  {/* Bottom Row: Diagnostics Starting Price & Navigate to Subcategories */}
                   <div className="catalog-card-footer">
                     <div className="catalog-price-box">
                       <span className="price-tag-label">DIAGNOSTICS</span>
-                      <strong className="price-tag-value">From {item.startingPrice}</strong>
+                      <strong className="price-tag-value">From ₹299</strong>
                     </div>
 
                     <Link
-                      href={`/booking/?service=${encodeURIComponent(item.name)}`}
-                      className={`catalog-book-btn ${item.featured ? 'btn-blue-featured' : 'btn-light-pill'}`}
+                      href={`/services/${item.slug}/`}
+                      className="catalog-view-btn"
                     >
-                      Book Service &rarr;
+                      <span>View Subcategories</span>
+                      <ArrowRight size={14} />
                     </Link>
                   </div>
                 </div>

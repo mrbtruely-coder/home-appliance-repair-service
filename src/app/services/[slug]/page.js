@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CheckCircle2, Phone, Sparkles, Tag } from 'lucide-react';
+import { CheckCircle2, Phone, Sparkles, Tag, Wrench, ArrowRight } from 'lucide-react';
 import ServiceCard from '@/components/ServiceCard';
 import FAQAccordion from '@/components/FAQAccordion';
 import StructuredData from '@/components/StructuredData';
@@ -92,6 +92,43 @@ export default async function ServiceDetailPage({ params }) {
                   <h3>{currentOffer.title} ({currentOffer.discount})</h3>
                   <p>{currentOffer.desc}</p>
                   <small className="offer-condition-note">{currentOffer.condition} · {currentOffer.expiry}</small>
+                </div>
+              </div>
+            )}
+
+            {/* Subcategories Showcase Section */}
+            {service.subcategories && service.subcategories.length > 0 && (
+              <div className="subcategories-section">
+                <div className="subcategories-section-header">
+                  <span className="eyebrow" style={{ color: '#16A34A' }}>AVAILABLE SUBCATEGORIES</span>
+                  <h2>{service.name} — Subcategory Services</h2>
+                  <p>Choose your specific appliance repair type below for fast same-day doorstep technician dispatch in Hyderabad:</p>
+                </div>
+
+                <div className="subcategories-grid">
+                  {service.subcategories.map((sub) => (
+                    <div key={sub.id} className="subcategory-card">
+                      <div className="subcategory-card-header">
+                        <div className="sub-icon-badge">
+                          <Wrench size={19} />
+                        </div>
+                        <div>
+                          <h3>{sub.name}</h3>
+                          <span className="sub-price-pill">From {sub.startingPrice}</span>
+                        </div>
+                      </div>
+                      <p className="sub-description">{sub.description}</p>
+                      <div className="sub-card-footer">
+                        <span className="sub-badge-warranty">✓ 90-Day Warranty</span>
+                        <Link
+                          href={`/booking/?service=${encodeURIComponent(sub.name)}`}
+                          className="sub-book-btn"
+                        >
+                          Book Now &rarr;
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
