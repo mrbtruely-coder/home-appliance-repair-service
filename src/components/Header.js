@@ -218,7 +218,7 @@ export default function Header() {
                 type="button"
                 onClick={() => setActiveDropdown(activeDropdown === 'locations' ? null : 'locations')}
                 className={`nav-dropdown-trigger ${
-                  activeDropdown === 'locations' || pathname?.startsWith('/locations') ? 'active-dropdown-pill' : ''
+                  activeDropdown === 'locations' || pathname?.startsWith('/service-center') || pathname?.startsWith('/locations') ? 'active-dropdown-pill' : ''
                 }`}
                 aria-expanded={activeDropdown === 'locations'}
               >
@@ -241,7 +241,7 @@ export default function Header() {
                     {LOCATION_DROPDOWN_ITEMS.map((loc) => (
                       <Link
                         key={loc.slug}
-                        href={`/locations/${loc.slug}/`}
+                        href={`/service-center/${loc.slug}/`}
                         onClick={() => setActiveDropdown(null)}
                         className="dropdown-item-link"
                       >
@@ -257,7 +257,7 @@ export default function Header() {
                   </div>
                   <div className="dropdown-card-footer">
                     <Link
-                      href="/locations/"
+                      href="/service-center/"
                       onClick={() => setActiveDropdown(null)}
                       className="dropdown-footer-link"
                     >
@@ -341,7 +341,7 @@ export default function Header() {
             {LOCATION_DROPDOWN_ITEMS.map((loc) => (
               <Link
                 key={loc.slug}
-                href={`/locations/${loc.slug}/`}
+                href={`/service-center/${loc.slug}/`}
                 onClick={() => setOpen(false)}
                 style={{ paddingLeft: '14px', fontSize: '13px' }}
               >
