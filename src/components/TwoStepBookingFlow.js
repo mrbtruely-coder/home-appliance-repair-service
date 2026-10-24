@@ -331,9 +331,12 @@ export default function TwoStepBookingFlow() {
           name: name.trim(),
           phone: cleanPhone,
           email: email.trim(),
-          appliance: fullServiceLabel,
+          appliance: applianceName,
           subcategory: subcategoryName,
+          fullService: fullServiceLabel,
+          price: subObj?.price || '₹299',
           area: area,
+          address: detectedAddress ? `${area} (GPS: ${detectedAddress})` : `${area}, Hyderabad`,
         }),
       });
 
