@@ -15,6 +15,14 @@ export const metadata = {
   title: { default: `${SITE_NAME} | Same-Day Appliance Repair in Hyderabad`, template: `%s | ${SITE_NAME}` },
   description: DEFAULT_DESCRIPTION,
   applicationName: SITE_NAME,
+  icons: {
+    icon: [
+      { url: '/logo.png', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
   category: 'home services',
   alternates: { canonical: '/' },
   openGraph: {
@@ -34,6 +42,11 @@ export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#
 export default function RootLayout({ children }) {
   return (
     <html lang="en-IN" suppressHydrationWarning>
+      <head>
+        <link rel="icon" type="image/png" href="/logo.png" />
+        <link rel="shortcut icon" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
+      </head>
       <body suppressHydrationWarning>
         <ToastProvider>
           <StructuredData data={localBusinessJsonLd()} />
