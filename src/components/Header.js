@@ -85,6 +85,8 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const dropdownRef = useRef(null);
+  const timeoutRef = useRef(null);
+  const isPinnedRef = useRef(false);
   const pathname = usePathname();
 
   const isLinkActive = (path) => {
@@ -92,20 +94,72 @@ export default function Header() {
     return pathname?.startsWith(path);
   };
 
+  const handleMouseEnter = (menuName) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setActiveDropdown(menuName);
+  };
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+      isPinnedRef.current = false;
+    }, 180);
+  };
+
+  const handleDropdownTriggerClick = (e, menuName) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    setActiveDropdown((prev) => {
+      if (prev === menuName) {
+        if (isPinnedRef.current) {
+          isPinnedRef.current = false;
+          return null;
+        } else {
+          isPinnedRef.current = true;
+          return menuName;
+        }
+      } else {
+        isPinnedRef.current = true;
+        return menuName;
+      }
+    });
+  };
+
+  const closeAllDropdowns = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setActiveDropdown(null);
+    isPinnedRef.current = false;
+  };
+
   // Close dropdown on click outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setActiveDropdown(null);
+        closeAllDropdowns();
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
 
   // Close dropdown when route changes
   useEffect(() => {
-    setActiveDropdown(null);
+    closeAllDropdowns();
     setOpen(false);
   }, [pathname]);
 
@@ -130,7 +184,7 @@ export default function Header() {
             aria-label="Home Appliance Repair Services Hyderabad"
             onClick={() => {
               setOpen(false);
-              setActiveDropdown(null);
+              closeAllDropdowns();
             }}
           >
             <DoorStepLogo size={52} />
@@ -140,7 +194,7 @@ export default function Header() {
           <nav className="desktop-nav modern-nav" aria-label="Main navigation">
             <Link
               href="/"
-              onMouseEnter={() => setActiveDropdown(null)}
+              onMouseEnter={closeAllDropdowns}
               className={`nav-link-item ${isLinkActive('/') && pathname === '/' ? 'active' : ''}`}
             >
               Home
@@ -149,11 +203,12 @@ export default function Header() {
             {/* Services Dropdown */}
             <div
               className="header-dropdown-container"
-              onMouseEnter={() => setActiveDropdown('services')}
+              onMouseEnter={() => handleMouseEnter('services')}
+              onMouseLeave={handleMouseLeave}
             >
               <button
                 type="button"
-                onClick={() => setActiveDropdown(activeDropdown === 'services' ? null : 'services')}
+                onClick={(e) => handleDropdownTriggerClick(e, 'services')}
                 className={`nav-dropdown-trigger ${
                   activeDropdown === 'services' || pathname?.startsWith('/services') ? 'active-dropdown-pill' : ''
                 }`}
@@ -167,10 +222,7 @@ export default function Header() {
               </button>
 
               {activeDropdown === 'services' && (
-                <div
-                  className="header-dropdown-card"
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
+                <div className="header-dropdown-card">
                   <div className="dropdown-card-header">
                     CORE REPAIR & APPLIANCE VERTICALS
                   </div>
@@ -181,7 +233,7 @@ export default function Header() {
                         <Link
                           key={item.slug}
                           href={`/services/${item.slug}/`}
-                          onClick={() => setActiveDropdown(null)}
+                          onClick={closeAllDropdowns}
                           className="dropdown-item-link"
                         >
                           <div className="dropdown-item-icon-box">
@@ -198,7 +250,7 @@ export default function Header() {
                   <div className="dropdown-card-footer">
                     <Link
                       href="/services/"
-                      onClick={() => setActiveDropdown(null)}
+                      onClick={closeAllDropdowns}
                       className="dropdown-footer-link"
                     >
                       <span>Explore All Services</span>
@@ -212,11 +264,12 @@ export default function Header() {
             {/* Locations Dropdown */}
             <div
               className="header-dropdown-container"
-              onMouseEnter={() => setActiveDropdown('locations')}
+              onMouseEnter={() => handleMouseEnter('locations')}
+              onMouseLeave={handleMouseLeave}
             >
               <button
                 type="button"
-                onClick={() => setActiveDropdown(activeDropdown === 'locations' ? null : 'locations')}
+                onClick={(e) => handleDropdownTriggerClick(e, 'locations')}
                 className={`nav-dropdown-trigger ${
                   activeDropdown === 'locations' || pathname?.startsWith('/service-center') || pathname?.startsWith('/locations') ? 'active-dropdown-pill' : ''
                 }`}
@@ -230,10 +283,7 @@ export default function Header() {
               </button>
 
               {activeDropdown === 'locations' && (
-                <div
-                  className="header-dropdown-card"
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
+                <div className="header-dropdown-card">
                   <div className="dropdown-card-header">
                     SERVICE HUBS & LOCALITIES
                   </div>
@@ -242,7 +292,7 @@ export default function Header() {
                       <Link
                         key={loc.slug}
                         href={`/service-center/${loc.slug}/`}
-                        onClick={() => setActiveDropdown(null)}
+                        onClick={closeAllDropdowns}
                         className="dropdown-item-link"
                       >
                         <div className="dropdown-item-icon-box location-icon-box">
@@ -258,7 +308,7 @@ export default function Header() {
                   <div className="dropdown-card-footer">
                     <Link
                       href="/service-center/"
-                      onClick={() => setActiveDropdown(null)}
+                      onClick={closeAllDropdowns}
                       className="dropdown-footer-link"
                     >
                       <span>All City Hubs & Coverage Areas</span>
@@ -271,7 +321,7 @@ export default function Header() {
 
             <Link
               href="/booking/"
-              onMouseEnter={() => setActiveDropdown(null)}
+              onMouseEnter={closeAllDropdowns}
               className={`nav-link-item ${isLinkActive('/booking') ? 'active' : ''}`}
             >
               Book Service
@@ -279,14 +329,14 @@ export default function Header() {
             </Link>
             <Link
               href="/faqs/"
-              onMouseEnter={() => setActiveDropdown(null)}
+              onMouseEnter={closeAllDropdowns}
               className={`nav-link-item ${isLinkActive('/faqs') ? 'active' : ''}`}
             >
               FAQs
             </Link>
             <Link
               href="/contact/"
-              onMouseEnter={() => setActiveDropdown(null)}
+              onMouseEnter={closeAllDropdowns}
               className={`nav-link-item ${isLinkActive('/contact') ? 'active' : ''}`}
             >
               Contact Us
