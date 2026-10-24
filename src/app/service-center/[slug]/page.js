@@ -189,12 +189,18 @@ export default async function ServiceCenterDetailPage({ params }) {
           {/* Colonies Grid */}
           <div className="loc-colonies-grid">
             {coloniesList.map((colony, idx) => (
-              <div key={idx} className="loc-colony-card">
+              <Link
+                key={idx}
+                href={`/services/?area=${encodeURIComponent(area.name)}&locality=${encodeURIComponent(colony)}`}
+                className="loc-colony-card"
+                title={`View all repair categories in ${colony}`}
+              >
                 <div className="colony-icon-pill">
                   <MapPin size={15} />
                 </div>
                 <span className="loc-colony-name">{colony}</span>
-              </div>
+                <span className="loc-colony-arrow" aria-hidden="true">→</span>
+              </Link>
             ))}
           </div>
 
