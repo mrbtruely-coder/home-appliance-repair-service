@@ -5,7 +5,11 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function getTransporter() {
-  const host = process.env.BOOKINGS_EMAIL_HOST || process.env.SMTP_HOST || 'mail.doorstephub.com';
+  let host = process.env.BOOKINGS_EMAIL_HOST || process.env.SMTP_HOST || 'mail.goexpertsapps.com';
+  // mail.doorstephub.com DNS maps to a web server that drops SMTP traffic; route to actual mail server
+  if (host === 'mail.doorstephub.com' || host === 'doorstephub.com') {
+    host = 'mail.goexpertsapps.com';
+  }
   const port = Number(process.env.BOOKINGS_EMAIL_PORT || process.env.SMTP_PORT) || 587;
   const user = process.env.BOOKINGS_EMAIL_USER || process.env.SMTP_USER || 'bookings@doorstephub.com';
   const pass = process.env.BOOKINGS_EMAIL_PASS || process.env.SMTP_PASS || 'jwT6NlDRBYh5';
@@ -21,9 +25,9 @@ function getTransporter() {
     tls: {
       rejectUnauthorized: false,
     },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000,
   });
 }
 
