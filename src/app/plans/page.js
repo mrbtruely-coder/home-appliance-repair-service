@@ -9,6 +9,13 @@ export const metadata = pageMetadata({
   description:
     'Compare Doorstep Basic Care, VIP Plus, and Elite AMC home appliance membership plans. Save up to 20% on AC, refrigerator, washing machine repairs in Hyderabad.',
   path: '/plans/',
+  keywords: [
+    'appliance AMC plans Hyderabad',
+    'appliance maintenance contract Hyderabad',
+    'home service membership Hyderabad',
+    'AC annual maintenance contract Hyderabad',
+    'refrigerator service plan Hyderabad',
+  ],
 });
 
 const GENERAL_PLAN_FAQS = [

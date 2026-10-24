@@ -2,10 +2,16 @@ import { SITE_NAME, SITE_URL } from './site';
 
 export function pageMetadata({ title, description, path = '/', keywords = [] }) {
   const canonical = `${SITE_URL}${path.endsWith('/') ? path : `${path}/`}`;
+  const keywordsList = Array.isArray(keywords)
+    ? keywords.filter(Boolean)
+    : typeof keywords === 'string'
+      ? keywords.split(',').map((k) => k.trim()).filter(Boolean)
+      : [];
+
   return {
     title,
     description,
-    keywords: keywords.length ? keywords : undefined,
+    keywords: keywordsList.length ? keywordsList : undefined,
     alternates: { canonical },
     openGraph: {
       type: 'website',

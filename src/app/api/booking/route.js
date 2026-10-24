@@ -5,10 +5,10 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 function getTransporter() {
-  const host = process.env.SMTP_HOST || 'mail.goexperts.in';
-  const port = Number(process.env.SMTP_PORT) || 465;
-  const user = process.env.SMTP_USER || 'helpdesk@goexperts.in';
-  const pass = process.env.SMTP_PASS || '7tT?Nc-]PfwF7.Cj';
+  const host = process.env.BOOKINGS_EMAIL_HOST || process.env.SMTP_HOST || 'mail.doorstephub.com';
+  const port = Number(process.env.BOOKINGS_EMAIL_PORT || process.env.SMTP_PORT) || 587;
+  const user = process.env.BOOKINGS_EMAIL_USER || process.env.SMTP_USER || 'bookings@doorstephub.com';
+  const pass = process.env.BOOKINGS_EMAIL_PASS || process.env.SMTP_PASS || 'jwT6NlDRBYh5';
 
   return nodemailer.createTransport({
     host,
@@ -21,6 +21,9 @@ function getTransporter() {
     tls: {
       rejectUnauthorized: false,
     },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
   });
 }
 
@@ -144,13 +147,14 @@ export async function POST(request) {
     const dateStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
     const transporter = getTransporter();
-    const fromAddress = process.env.SMTP_FROM || 'servicedesk@goexperts.in';
-    const helpdeskEmail = process.env.SMTP_USER || 'helpdesk@goexperts.in';
+    const senderEmail = process.env.BOOKINGS_EMAIL_USER || process.env.SMTP_USER || 'bookings@doorstephub.com';
+    const doorstepTeamEmail = process.env.ADMIN_NOTIFY_EMAIL || 'doorstephub@gmail.com';
 
     let userEmailSent = false;
+    let teamEmailSent = false;
     let emailError = null;
 
-    // Send confirmation email to the user if email is provided
+    // 1. Send confirmation email to the customer if email is provided
     if (email && email.includes('@')) {
       try {
         const customerHtml = generateCustomerEmailHtml({
@@ -164,10 +168,10 @@ export async function POST(request) {
         });
 
         await transporter.sendMail({
-          from: `"Doorstep Service Hyderabad" <${fromAddress}>`,
+          from: `"Doorstep Hub" <${senderEmail}>`,
           to: email.trim(),
-          replyTo: helpdeskEmail,
-          subject: `✓ Service Dispatched: ${appliance || 'Appliance Repair'} [${bookingRef}] - Doorstep Service`,
+          replyTo: doorstepTeamEmail,
+          subject: `✓ Booking Confirmed: ${appliance || 'Appliance Repair'} [${bookingRef}] - Doorstep Hub`,
           html: customerHtml,
         });
         userEmailSent = true;
@@ -177,35 +181,46 @@ export async function POST(request) {
       }
     }
 
-    // Also notify the helpdesk / admin about new booking
+    // 2. Send email of customer booked to doorstep teams doorstephub@gmail.com
     try {
       await transporter.sendMail({
-        from: `"Doorstep Bookings" <${fromAddress}>`,
-        to: helpdeskEmail,
+        from: `"Doorstep Hub Bookings" <${senderEmail}>`,
+        to: doorstepTeamEmail,
+        replyTo: (email && email.includes('@')) ? email.trim() : senderEmail,
         subject: `[NEW BOOKING] ${bookingRef} - ${appliance} in ${area} (${name})`,
-        text: `New Service Booking Received:\n\nReference: ${bookingRef}\nCustomer: ${name}\nPhone: ${phone}\nEmail: ${email || 'Not provided'}\nAppliance: ${appliance}\nArea: ${area}, Hyderabad\nTime: ${dateStr}\nExpected Arrival: Within 90 minutes\n`,
+        text: `New Service Booking Received:\n\nReference: ${bookingRef}\nCustomer: ${name}\nPhone: ${phone}\nEmail: ${email || 'Not provided'}\nAppliance: ${appliance}\nSubcategory/Issue: ${body.subcategory || 'Standard Service'}\nArea: ${area}, Hyderabad\nTime: ${dateStr}\nExpected Arrival: Within 90 minutes\n`,
         html: `
-          <div style="font-family: sans-serif; padding: 20px; line-height: 1.5;">
-            <h2 style="color: #1d4ed8;">New Service Booking Logged</h2>
-            <p><strong>Booking Ref:</strong> ${bookingRef}</p>
-            <p><strong>Customer Name:</strong> ${name}</p>
-            <p><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></p>
-            <p><strong>Email:</strong> ${email || 'N/A'}</p>
-            <p><strong>Appliance:</strong> ${appliance}</p>
-            <p><strong>Area:</strong> ${area}, Hyderabad</p>
-            <p><strong>Timestamp:</strong> ${dateStr}</p>
-            <p style="background: #eff6ff; padding: 12px; border-radius: 8px;"><strong>Status:</strong> Technician dispatch requested (within 90 minutes)</p>
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 24px; line-height: 1.6; max-width: 600px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;">
+            <div style="background: #0A2558; color: #ffffff; padding: 18px 24px; border-radius: 8px; margin-bottom: 20px;">
+              <h2 style="margin: 0; font-size: 20px; font-weight: 700;">New Customer Booking Dispatched</h2>
+              <p style="margin: 4px 0 0; font-size: 13px; color: #FFD6B8;">Doorstep Hub • Hyderabad Home Appliance Dispatch</p>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+              <tr><td style="padding: 10px 0; color: #64748b; width: 140px; border-bottom: 1px solid #f1f5f9;">Booking Ref:</td><td style="padding: 10px 0; font-weight: 800; color: #FF6B00; border-bottom: 1px solid #f1f5f9;">${bookingRef}</td></tr>
+              <tr><td style="padding: 10px 0; color: #64748b; border-bottom: 1px solid #f1f5f9;">Customer Name:</td><td style="padding: 10px 0; font-weight: 700; color: #0A2558; border-bottom: 1px solid #f1f5f9;">${name}</td></tr>
+              <tr><td style="padding: 10px 0; color: #64748b; border-bottom: 1px solid #f1f5f9;">Customer Phone:</td><td style="padding: 10px 0; font-weight: 800; border-bottom: 1px solid #f1f5f9;"><a href="tel:${phone}" style="color: #0A2558; text-decoration: underline;">${phone}</a></td></tr>
+              <tr><td style="padding: 10px 0; color: #64748b; border-bottom: 1px solid #f1f5f9;">Customer Email:</td><td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9;">${email || 'Not provided'}</td></tr>
+              <tr><td style="padding: 10px 0; color: #64748b; border-bottom: 1px solid #f1f5f9;">Service / Appliance:</td><td style="padding: 10px 0; font-weight: 700; color: #0A2558; border-bottom: 1px solid #f1f5f9;">${appliance}</td></tr>
+              ${body.subcategory ? `<tr><td style="padding: 10px 0; color: #64748b; border-bottom: 1px solid #f1f5f9;">Subcategory:</td><td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9;">${body.subcategory}</td></tr>` : ''}
+              <tr><td style="padding: 10px 0; color: #64748b; border-bottom: 1px solid #f1f5f9;">Location / Area:</td><td style="padding: 10px 0; font-weight: 700; color: #0A2558; border-bottom: 1px solid #f1f5f9;">${area}, Hyderabad</td></tr>
+              <tr><td style="padding: 10px 0; color: #64748b; border-bottom: 1px solid #f1f5f9;">Booking Time:</td><td style="padding: 10px 0; border-bottom: 1px solid #f1f5f9;">${dateStr}</td></tr>
+            </table>
+            <div style="background: #FFF4EC; border: 1px solid #FFCCA3; border-radius: 8px; padding: 14px 18px; margin-top: 22px; font-size: 13px; color: #9A3412;">
+              ⚡ <strong>Action for Team:</strong> Please call customer <a href="tel:${phone}" style="color: #C2410C; font-weight: 800;">${phone}</a> and assign local technician to arrive within 90 minutes.
+            </div>
           </div>
         `,
       });
-    } catch (adminErr) {
-      console.error('Failed to send admin notification email:', adminErr);
+      teamEmailSent = true;
+    } catch (teamErr) {
+      console.error('Failed to send doorstep team notification email to doorstephub@gmail.com:', teamErr);
     }
 
     return NextResponse.json({
       success: true,
       bookingRef,
       userEmailSent,
+      teamEmailSent,
       emailError: emailError || null,
       message: userEmailSent
         ? `Booking confirmed! Confirmation email sent to ${email}.`

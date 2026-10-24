@@ -1,9 +1,15 @@
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
-  title: 'About Doorstep Home Appliance Services',
-  description: 'Learn about Doorstep Home Appliance Services and our straightforward approach to appliance repair enquiries in selected Hyderabad neighbourhoods.',
+  title: 'About Doorstep Service Hyderabad | Reliable Home Appliance Care',
+  description: 'Learn about Doorstep Service in Hyderabad. We connect homeowners with certified local technicians for fast, reliable, and affordable home appliance repairs.',
   path: '/about/',
+  keywords: [
+    'about Doorstep Service Hyderabad',
+    'appliance repair company Hyderabad',
+    'home appliance service provider Hyderabad',
+    'certified technician Hyderabad',
+  ],
 });
 
 export default function AboutPage() {

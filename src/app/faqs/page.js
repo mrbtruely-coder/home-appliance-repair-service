@@ -3,9 +3,16 @@ import { FAQS } from '@/lib/site';
 import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
-  title: 'Home Appliance Repair FAQs',
-  description: 'Answers about booking, service areas, repair estimates and WhatsApp enquiries with Doorstep Home Appliance Services in Hyderabad.',
+  title: 'Home Appliance Repair FAQs | Doorstep Service Hyderabad',
+  description: 'Frequently asked questions about home appliance repair in Hyderabad. Learn about visiting charges, 90-minute arrival, warranty, and covered areas.',
   path: '/faqs/',
+  keywords: [
+    'appliance repair FAQs Hyderabad',
+    'technician visit charges Hyderabad',
+    'doorstep appliance warranty',
+    'AC repair cost Hyderabad',
+    'doorstep service questions',
+  ],
 });
 
 export default function FAQsPage() {
