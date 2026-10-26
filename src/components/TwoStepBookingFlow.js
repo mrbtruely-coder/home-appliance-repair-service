@@ -320,10 +320,10 @@ export default function TwoStepBookingFlow() {
     const subObj = subcats.find((s) => s.id === selectedSubcategory) || subcats[0];
     const subcategoryName = subObj?.name || '';
     const fullServiceLabel = subcategoryName ? `${applianceName} — ${subcategoryName}` : applianceName;
-
     try {
       // Call Node.js Backend API to send confirmation email
-      const response = await fetch('/api/booking/', {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://backendapi.homeappliancerepairsservices.com';
+      const response = await fetch(`${apiBase}/api/booking`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -331,6 +331,7 @@ export default function TwoStepBookingFlow() {
           name: name.trim(),
           phone: cleanPhone,
           email: email.trim(),
+          service: fullServiceLabel,
           appliance: applianceName,
           subcategory: subcategoryName,
           fullService: fullServiceLabel,

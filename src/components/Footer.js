@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { Wrench } from 'lucide-react';
-import { PHONE_E164, PHONE_DISPLAY, WHATSAPP_URL } from '@/lib/site';
+import { PHONE_E164, PHONE_DISPLAY, WHATSAPP_URL, PLAY_STORE_URL, APP_STORE_URL } from '@/lib/site';
 
 import DoorStepLogo from '@/components/DoorStepLogo';
 import { AppleIcon, GooglePlayIcon } from '@/components/AppStoreIcons';
@@ -19,20 +19,19 @@ export default function Footer() {
             Door Step Service is Hyderabad&apos;s premium appliance repair and maintenance company. We specialize in fast AC, Refrigerator, Washing Machine, Microwave, Geyser, and TV diagnostics right at your home.
           </p>
 
-          {/* Industry Level Mobile App Download Badges */}
+          {/* Industry Level Mobile App Download Badges (Dynamic) */}
           <div className="footer-app-badges-box" style={{ marginTop: '22px' }}>
             <span style={{ display: 'block', fontSize: '11px', fontWeight: 800, letterSpacing: '0.08em', color: '#FFFFFF', textTransform: 'uppercase', marginBottom: '10px' }}>
               EXPERIENCE ON MOBILE APP
             </span>
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               <a
-                href="#app-download"
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="app-badge-btn"
                 style={{ padding: '9px 15px', borderRadius: '10px', background: '#0F2F6E', border: '1px solid rgba(255, 255, 255, 0.22)', display: 'inline-flex', alignItems: 'center', gap: '9px', textDecoration: 'none', color: '#fff', transition: 'all 0.2s ease' }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert('Doorstep Service iOS App is coming soon on the App Store!');
-                }}
+                title="Download Doorstep Hub on Apple App Store"
               >
                 <AppleIcon size={20} />
                 <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, textAlign: 'left' }}>
@@ -42,13 +41,12 @@ export default function Footer() {
               </a>
 
               <a
-                href="#app-download"
+                href={PLAY_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="app-badge-btn"
                 style={{ padding: '9px 15px', borderRadius: '10px', background: '#0F2F6E', border: '1px solid rgba(255, 255, 255, 0.22)', display: 'inline-flex', alignItems: 'center', gap: '9px', textDecoration: 'none', color: '#fff', transition: 'all 0.2s ease' }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert('Doorstep Service Android App is coming soon on Google Play!');
-                }}
+                title="Get Doorstep Hub on Google Play Store"
               >
                 <GooglePlayIcon size={18} />
                 <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, textAlign: 'left' }}>
@@ -155,18 +153,25 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="container footer-bottom-bar">
-        <span className="footer-copy-text">
-          © {new Date().getFullYear()} DOOR STEP SERVICE. All rights reserved.
-        </span>
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-          <Link href="/terms/" style={{ color: '#94A3B8', fontSize: '12px' }}>Terms of Service</Link>
-          <span style={{ color: 'rgba(255,255,255,0.2)' }}>•</span>
-          <Link href="/privacy-policy/" style={{ color: '#94A3B8', fontSize: '12px' }}>Privacy Policy</Link>
+      <div className="container footer-bottom-bar" style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', textAlign: 'center' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '6px 14px', borderRadius: '999px' }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '16px', height: '16px', borderRadius: '50%', background: '#10B981', color: '#0C1D4C', fontSize: '11px', fontWeight: 900 }}>✓</span>
+          <span style={{ color: '#34D399', fontSize: '12.5px', fontWeight: 800, letterSpacing: '0.04em' }}>Verified &amp; Trusted by Doorstep Hub</span>
         </div>
-        <span className="footer-made-with">
-          Made with <span style={{ color: '#FF6B00' }}>❤️</span> for Hyderabad residents
-        </span>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: '14px' }}>
+          <span className="footer-copy-text">
+            © {new Date().getFullYear()} DOOR STEP SERVICE. All rights reserved.
+          </span>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <Link href="/terms/" style={{ color: '#94A3B8', fontSize: '12px' }}>Terms of Service</Link>
+            <span style={{ color: 'rgba(255,255,255,0.2)' }}>•</span>
+            <Link href="/privacy-policy/" style={{ color: '#94A3B8', fontSize: '12px' }}>Privacy Policy</Link>
+          </div>
+          <span className="footer-made-with">
+            Made with <span style={{ color: '#FF6B00' }}>❤️</span> for Hyderabad residents
+          </span>
+        </div>
       </div>
     </footer>
   );

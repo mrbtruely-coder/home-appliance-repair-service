@@ -7,6 +7,12 @@ export const GST_RATE = 18;
 export const PLATFORM_FEE = 10;
 export const PHONE_E164 = '+919515661677';
 export const WHATSAPP_URL = 'https://wa.me/919515661677';
+export const PLAY_STORE_URL =
+  process.env.NEXT_PUBLIC_PLAY_STORE_URL ||
+  'https://play.google.com/store/apps/details?id=com.doorstephub.customer&pcampaignid=web_share';
+export const APP_STORE_URL =
+  process.env.NEXT_PUBLIC_APP_STORE_URL ||
+  'https://apps.apple.com/in/app/doorstep-hub-all-your-needs/id6475340236';
 export const CITY = 'Hyderabad';
 export const DEFAULT_DESCRIPTION =
   'Request same-day doorstep home appliance repair for AC, Refrigerator, Washing Machine, Oven, Geyser, and TV in Hyderabad. A certified technician arrives in 90 minutes. Call 9515661677.';

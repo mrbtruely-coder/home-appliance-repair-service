@@ -103,32 +103,10 @@ const AREA_SEO_CONFIG = {
   },
 };
 
-export async function generateMetadata({ params, searchParams }) {
+export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const sp = searchParams ? await searchParams : {};
-  const subArea = sp?.locality || sp?.subarea || sp?.colony;
   const area = AREAS.find((item) => item.slug === slug);
   if (!area) return { title: 'Service Center Not Found' };
-
-  if (subArea) {
-    return pageMetadata({
-      title: `Home Appliance Repair in ${subArea}, ${area.name}, Hyderabad | Doorstep Service`,
-      description: `Looking for reliable home appliance repair in ${subArea}, ${area.name}? Our local technician arrives at your door in 90 minutes. Same-day repair for AC, fridge, washing machine, oven, and TV with genuine parts. Call ${PHONE_DISPLAY}.`,
-      path: `/service-center/${area.slug}/?locality=${encodeURIComponent(subArea)}`,
-      keywords: [
-        `${subArea} appliance repair Hyderabad`,
-        `AC repair in ${subArea} Hyderabad`,
-        `washing machine service ${subArea} Hyderabad`,
-        `refrigerator repair ${subArea} Hyderabad`,
-        `microwave oven repair ${subArea} Hyderabad`,
-        `TV repair ${subArea} Hyderabad`,
-        `doorstep technician ${subArea} ${area.name}`,
-        `appliance repair in ${area.name} Hyderabad`,
-        'Hyderabad home appliance repair',
-        'doorstep repair service Hyderabad',
-      ],
-    });
-  }
 
   const customSeo = AREA_SEO_CONFIG[area.slug] || {
     title: `Home Appliance Repair in ${area.name}, Hyderabad | Doorstep Service`,

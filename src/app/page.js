@@ -26,7 +26,7 @@ import {
   ArrowRight,
   Smartphone,
 } from 'lucide-react';
-import { PHONE_DISPLAY, PHONE_E164, WHATSAPP_URL, SERVICES } from '@/lib/site';
+import { PHONE_DISPLAY, PHONE_E164, WHATSAPP_URL, SERVICES, PLAY_STORE_URL, APP_STORE_URL } from '@/lib/site';
 import { AppleIcon, GooglePlayIcon } from '@/components/AppStoreIcons';
 import DoorStepLogo from '@/components/DoorStepLogo';
 
@@ -516,12 +516,11 @@ export default function NewHomePage() {
 
               <div className="app-download-buttons-row">
                 <a
-                  href="#app-download"
+                  href={APP_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="industry-app-btn"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert('Doorstep Service iOS App is coming soon on the Apple App Store!');
-                  }}
+                  title="Download Doorstep Hub on Apple App Store"
                 >
                   <AppleIcon size={26} />
                   <div className="app-btn-text">
@@ -531,12 +530,11 @@ export default function NewHomePage() {
                 </a>
 
                 <a
-                  href="#app-download"
+                  href={PLAY_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="industry-app-btn"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert('Doorstep Service Android App is coming soon on the Google Play Store!');
-                  }}
+                  title="Get Doorstep Hub on Google Play Store"
                 >
                   <GooglePlayIcon size={24} />
                   <div className="app-btn-text">

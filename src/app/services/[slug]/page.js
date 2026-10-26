@@ -19,55 +19,17 @@ export function generateStaticParams() {
   return SERVICES.map((service) => ({ slug: service.slug }));
 }
 
-export async function generateMetadata({ params, searchParams }) {
+export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const sp = searchParams ? await searchParams : {};
-  const area = sp?.area;
-  const locality = sp?.locality;
-  const locationContext = locality ? `${locality}, ${area}` : area;
-
   const service = SERVICES.find((item) => item.slug === slug);
   if (!service) return { title: 'Service not found' };
-
-  const subcatKeywords = (service.subcategories || []).map((s) => s.name);
-  const commonProblems = (service.concerns || []).map((c) => `${service.name} ${c}`);
-
-  if (locationContext) {
-    return pageMetadata({
-      title: `${service.name} in ${locationContext}, Hyderabad | Doorstep Repair`,
-      description: `Need fast ${service.name.toLowerCase()} in ${locationContext}, Hyderabad? Our certified technician arrives at your home within 90 minutes. Upfront pricing from ₹299, genuine spare parts, and 90-day warranty. Call ${PHONE_DISPLAY}.`,
-      path: `/services/${service.slug}/?area=${encodeURIComponent(area || '')}${locality ? `&locality=${encodeURIComponent(locality)}` : ''}`,
-      keywords: [
-        `${service.name} in ${locationContext} Hyderabad`,
-        `${service.name.toLowerCase()} in ${locationContext}`,
-        `doorstep ${service.name.toLowerCase()} ${locationContext}`,
-        `${service.name.toLowerCase()} technician ${locationContext} Hyderabad`,
-        `same day ${service.name.toLowerCase()} in ${locationContext}`,
-        `best ${service.name.toLowerCase()} near me in ${locationContext}`,
-        ...subcatKeywords.map((s) => `${s} in ${locationContext}`),
-        `${service.name} Hyderabad`,
-        `Hyderabad ${service.name.toLowerCase()}`,
-        'home appliance repair Hyderabad',
-        'doorstep repair service Hyderabad',
-      ],
-    });
-  }
 
   return pageMetadata({
     title: `${service.name} in Hyderabad | Same-Day Doorstep Service`,
     description: `Looking for reliable ${service.name.toLowerCase()} in Hyderabad? Our certified technicians arrive at your home within 90 minutes. Honest diagnostics from ₹299, genuine spare parts, and 90-day warranty. Call ${PHONE_DISPLAY}.`,
     path: `/services/${service.slug}/`,
     keywords: [
-      // Service based keywords
-      `${service.name}`,
-      `${service.name.toLowerCase()} repair`,
-      `${service.name.toLowerCase()} service`,
-      `${service.slug.replace(/-/g, ' ')}`,
-      ...subcatKeywords,
-      ...commonProblems.slice(0, 4),
-      // Cities + service keywords for city based urls
-      `${service.name} Hyderabad`,
-      `Hyderabad ${service.name.toLowerCase()}`,
+      `${service.name} in Hyderabad`,
       `${service.name.toLowerCase()} in Hyderabad`,
       `doorstep ${service.name.toLowerCase()} Hyderabad`,
       `${service.name.toLowerCase()} service center Hyderabad`,

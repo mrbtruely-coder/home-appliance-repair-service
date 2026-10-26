@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Bell, UserRound, LogOut, ChevronDown, Smartphone } from 'lucide-react';
 import { AppleIcon, GooglePlayIcon } from '@/components/AppStoreIcons';
+import { PLAY_STORE_URL, APP_STORE_URL } from '@/lib/site';
 import AuthModal from '@/components/AuthModal';
 
 export function AccountLinks() {
@@ -103,12 +104,10 @@ export function AppPromotion() {
           <div className="app-promo-actions">
             <a
               className="app-badge-btn"
-              href="#app-download"
-              title="Download on the App Store (Coming Soon)"
-              onClick={(e) => {
-                e.preventDefault();
-                alert('iOS App coming soon on Apple App Store!');
-              }}
+              href={APP_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Download Doorstep Hub on Apple App Store"
             >
               <AppleIcon size={24} />
               <div className="app-badge-text">
@@ -119,12 +118,10 @@ export function AppPromotion() {
 
             <a
               className="app-badge-btn"
-              href="#play-store"
-              title="Get it on Google Play (Coming Soon)"
-              onClick={(e) => {
-                e.preventDefault();
-                alert('Android App coming soon on Google Play Store!');
-              }}
+              href={PLAY_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Get Doorstep Hub on Google Play Store"
             >
               <GooglePlayIcon size={22} />
               <div className="app-badge-text">

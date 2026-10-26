@@ -4,60 +4,30 @@ import { Check, ArrowRight } from 'lucide-react';
 import { pageMetadata } from '@/lib/seo';
 import { SERVICES } from '@/lib/site';
 
-export async function generateMetadata({ searchParams }) {
-  const params = await searchParams;
-  const area = params?.area;
-  const locality = params?.locality;
-  const locationContext = locality ? `${locality}, ${area}` : area;
+export const metadata = pageMetadata({
+  title: 'Home Appliance Repair Services in Hyderabad | Fast Doorstep Care',
+  description: 'Reliable doorstep home appliance repair in Hyderabad. Certified technicians for AC, Refrigerator, Washing Machine, Oven, Geyser, and Smart TV with same-day dispatch and ₹0 booking fee.',
+  path: '/services/',
+  keywords: [
+    'home appliance repair Hyderabad',
+    'doorstep appliance service Hyderabad',
+    'AC repair Hyderabad',
+    'refrigerator repair Hyderabad',
+    'washing machine repair Hyderabad',
+    'microwave oven repair Hyderabad',
+    'geyser repair Hyderabad',
+    'smart TV repair Hyderabad',
+    'same day appliance repair Hyderabad',
+    'appliance service center Hyderabad',
+    'doorstep technician Hyderabad',
+    'appliance repair services near me Hyderabad',
+  ],
+});
 
-  if (locationContext) {
-    return pageMetadata({
-      title: `Home Appliance Repair in ${locationContext}, Hyderabad | Doorstep Service`,
-      description: `Need fast home appliance repair in ${locationContext}, Hyderabad? Certified doorstep technicians for AC, refrigerator, washing machine, microwave, geyser, and TV arrive in 90 mins. Clear pricing from ₹299.`,
-      path: `/services/?area=${encodeURIComponent(area || '')}${locality ? `&locality=${encodeURIComponent(locality)}` : ''}`,
-      keywords: [
-        `appliance repair in ${locationContext} Hyderabad`,
-        `${locationContext} appliance repair`,
-        `AC repair in ${locationContext} Hyderabad`,
-        `washing machine service ${locationContext} Hyderabad`,
-        `refrigerator repair ${locationContext} Hyderabad`,
-        `microwave oven repair ${locationContext} Hyderabad`,
-        `geyser repair ${locationContext} Hyderabad`,
-        `TV repair ${locationContext} Hyderabad`,
-        `doorstep appliance technician ${locationContext}`,
-        `same day appliance service ${locationContext} Hyderabad`,
-        'Hyderabad home appliance repair',
-        'doorstep repair service Hyderabad',
-      ],
-    });
-  }
-
-  return pageMetadata({
-    title: 'Home Appliance Repair Services in Hyderabad | Fast Doorstep Care',
-    description: 'Reliable doorstep home appliance repair in Hyderabad. Certified technicians for AC, Refrigerator, Washing Machine, Oven, Geyser, and Smart TV with same-day dispatch and ₹0 booking fee.',
-    path: '/services/',
-    keywords: [
-      'home appliance repair Hyderabad',
-      'doorstep appliance service Hyderabad',
-      'AC repair Hyderabad',
-      'refrigerator repair Hyderabad',
-      'washing machine repair Hyderabad',
-      'microwave oven repair Hyderabad',
-      'geyser repair Hyderabad',
-      'smart TV repair Hyderabad',
-      'same day appliance repair Hyderabad',
-      'appliance service center Hyderabad',
-      'doorstep technician Hyderabad',
-      'appliance repair services near me Hyderabad',
-    ],
-  });
-}
-
-export default async function ServicesPage({ searchParams }) {
-  const params = await searchParams;
-  const area = params?.area;
-  const locality = params?.locality;
-  const locationContext = locality ? `${locality}, ${area}` : area;
+export default function ServicesPage() {
+  const area = null;
+  const locality = null;
+  const locationContext = null;
 
   return (
     <div className="services-catalog-page">
