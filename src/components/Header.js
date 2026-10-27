@@ -60,24 +60,14 @@ const SERVICE_DROPDOWN_ITEMS = [
 
 const LOCATION_DROPDOWN_ITEMS = [
   {
-    slug: 'ameerpet-main-road',
-    name: 'Ameerpet Main Road',
-    desc: 'Hyderabad',
+    slug: 'hyderabad',
+    name: 'Hyderabad',
+    desc: 'Central Hyderabad & IT Corridor',
   },
   {
-    slug: 'chanda-nagar',
-    name: 'Chanda Nagar',
-    desc: 'Hyderabad',
-  },
-  {
-    slug: 'alwal',
-    name: 'Alwal',
-    desc: 'Hyderabad',
-  },
-  {
-    slug: 'suchitra',
-    name: 'Suchitra',
-    desc: 'Hyderabad',
+    slug: 'secunderabad',
+    name: 'Secunderabad',
+    desc: 'Secunderabad & Cantonment Hub',
   },
 ];
 
@@ -111,32 +101,17 @@ export default function Header() {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
-      isPinnedRef.current = false;
-    }, 180);
+    }, 280);
   };
 
-  const handleDropdownTriggerClick = (e, menuName) => {
+  const toggleDropdown = (e, menuName) => {
     e.preventDefault();
     e.stopPropagation();
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
-
-    setActiveDropdown((prev) => {
-      if (prev === menuName) {
-        if (isPinnedRef.current) {
-          isPinnedRef.current = false;
-          return null;
-        } else {
-          isPinnedRef.current = true;
-          return menuName;
-        }
-      } else {
-        isPinnedRef.current = true;
-        return menuName;
-      }
-    });
+    setActiveDropdown((prev) => (prev === menuName ? null : menuName));
   };
 
   const closeAllDropdowns = () => {
@@ -178,7 +153,7 @@ export default function Header() {
           <div className="top-banner-main-line">
             <span className="top-banner-icon">⚡</span>
             <span className="top-banner-text">
-              SAME-DAY DOORSTEP APPLIANCE REPAIR IN <strong>HYDERABAD</strong>
+              SAME-DAY DOORSTEP APPLIANCE REPAIR IN <strong>VIJAYAWADA, GUNTUR &amp; NELLORE</strong>
             </span>
           </div>
           <div className="top-banner-call-line">
@@ -220,11 +195,12 @@ export default function Header() {
             >
               <button
                 type="button"
-                onClick={(e) => handleDropdownTriggerClick(e, 'services')}
+                onClick={(e) => toggleDropdown(e, 'services')}
                 className={`nav-dropdown-trigger ${
                   activeDropdown === 'services' || pathname?.startsWith('/services') ? 'active-dropdown-pill' : ''
                 }`}
                 aria-expanded={activeDropdown === 'services'}
+                aria-haspopup="true"
               >
                 <span>Services</span>
                 <ChevronDown
@@ -233,44 +209,46 @@ export default function Header() {
                 />
               </button>
 
-              {activeDropdown === 'services' && (
-                <div className="header-dropdown-card">
-                  <div className="dropdown-card-header">
-                    CORE REPAIR & APPLIANCE VERTICALS
-                  </div>
-                  <div className="dropdown-card-list">
-                    {SERVICE_DROPDOWN_ITEMS.map((item) => {
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.slug}
-                          href={`/services/${item.slug}/`}
-                          onClick={closeAllDropdowns}
-                          className="dropdown-item-link"
-                        >
-                          <div className="dropdown-item-icon-box">
-                            <Icon size={18} />
-                          </div>
-                          <div className="dropdown-item-text">
-                            <p className="dropdown-item-title">{item.name}</p>
-                            <p className="dropdown-item-subtitle">{item.desc}</p>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                  <div className="dropdown-card-footer">
-                    <Link
-                      href="/services/"
-                      onClick={closeAllDropdowns}
-                      className="dropdown-footer-link"
-                    >
-                      <span>Explore All Services</span>
-                      <ArrowRight size={14} />
-                    </Link>
-                  </div>
+              <div
+                className={`header-dropdown-card ${activeDropdown === 'services' ? 'is-active-card' : ''}`}
+                onMouseEnter={() => handleMouseEnter('services')}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="dropdown-card-header">
+                  CORE REPAIR &amp; APPLIANCE VERTICALS
                 </div>
-              )}
+                <div className="dropdown-card-list">
+                  {SERVICE_DROPDOWN_ITEMS.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.slug}
+                        href={`/services/${item.slug}/`}
+                        onClick={closeAllDropdowns}
+                        className="dropdown-item-link"
+                      >
+                        <div className="dropdown-item-icon-box">
+                          <Icon size={18} />
+                        </div>
+                        <div className="dropdown-item-text">
+                          <p className="dropdown-item-title">{item.name}</p>
+                          <p className="dropdown-item-subtitle">{item.desc}</p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+                <div className="dropdown-card-footer">
+                  <Link
+                    href="/services/"
+                    onClick={closeAllDropdowns}
+                    className="dropdown-footer-link"
+                  >
+                    <span>Explore All Services</span>
+                    <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
             </div>
 
             {/* Locations Dropdown */}
@@ -281,11 +259,12 @@ export default function Header() {
             >
               <button
                 type="button"
-                onClick={(e) => handleDropdownTriggerClick(e, 'locations')}
+                onClick={(e) => toggleDropdown(e, 'locations')}
                 className={`nav-dropdown-trigger ${
                   activeDropdown === 'locations' || pathname?.startsWith('/service-center') || pathname?.startsWith('/locations') ? 'active-dropdown-pill' : ''
                 }`}
                 aria-expanded={activeDropdown === 'locations'}
+                aria-haspopup="true"
               >
                 <span>Locations</span>
                 <ChevronDown
@@ -294,41 +273,43 @@ export default function Header() {
                 />
               </button>
 
-              {activeDropdown === 'locations' && (
-                <div className="header-dropdown-card">
-                  <div className="dropdown-card-header">
-                    SERVICE HUBS & LOCALITIES
-                  </div>
-                  <div className="dropdown-card-list">
-                    {LOCATION_DROPDOWN_ITEMS.map((loc) => (
-                      <Link
-                        key={loc.slug}
-                        href={`/service-center/${loc.slug}/`}
-                        onClick={closeAllDropdowns}
-                        className="dropdown-item-link"
-                      >
-                        <div className="dropdown-item-icon-box location-icon-box">
-                          <MapPin size={18} />
-                        </div>
-                        <div className="dropdown-item-text">
-                          <p className="dropdown-item-title">{loc.name}</p>
-                          <p className="dropdown-item-subtitle">{loc.desc}</p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="dropdown-card-footer">
-                    <Link
-                      href="/service-center/"
-                      onClick={closeAllDropdowns}
-                      className="dropdown-footer-link"
-                    >
-                      <span>All City Hubs & Coverage Areas</span>
-                      <ArrowRight size={14} />
-                    </Link>
-                  </div>
+              <div
+                className={`header-dropdown-card ${activeDropdown === 'locations' ? 'is-active-card' : ''}`}
+                onMouseEnter={() => handleMouseEnter('locations')}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="dropdown-card-header">
+                  SERVICE HUBS &amp; LOCALITIES
                 </div>
-              )}
+                <div className="dropdown-card-list">
+                  {LOCATION_DROPDOWN_ITEMS.map((loc) => (
+                    <Link
+                      key={loc.slug}
+                      href={`/locations/${loc.slug}/`}
+                      onClick={closeAllDropdowns}
+                      className="dropdown-item-link"
+                    >
+                      <div className="dropdown-item-icon-box location-icon-box">
+                        <MapPin size={18} />
+                      </div>
+                      <div className="dropdown-item-text">
+                        <p className="dropdown-item-title">{loc.name}</p>
+                        <p className="dropdown-item-subtitle">{loc.desc}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <div className="dropdown-card-footer">
+                  <Link
+                    href="/locations/"
+                    onClick={closeAllDropdowns}
+                    className="dropdown-footer-link"
+                  >
+                    <span>All City Hubs &amp; Coverage Areas</span>
+                    <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
             </div>
 
             <Link

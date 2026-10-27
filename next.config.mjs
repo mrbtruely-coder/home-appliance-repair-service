@@ -8,6 +8,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  staticPageGenerationTimeout: 180,
 };
 
 export default nextConfig;
