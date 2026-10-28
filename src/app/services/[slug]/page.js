@@ -35,6 +35,8 @@ export async function generateMetadata({ params }) {
       `${service.name.toLowerCase()} service center Hyderabad`,
       `same day ${service.name.toLowerCase()} Hyderabad`,
       `best ${service.name.toLowerCase()} near me Hyderabad`,
+      `certified ${service.name.toLowerCase()} technician`,
+      `affordable ${service.name.toLowerCase()} charges`,
       'home appliance repair Hyderabad',
       'doorstep appliance service Hyderabad',
     ],

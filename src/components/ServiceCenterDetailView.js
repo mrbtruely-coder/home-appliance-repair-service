@@ -179,9 +179,9 @@ export default function ServiceCenterDetailView({
     const targetCity = area.slug === 'secunderabad' ? 'secunderabad' : 'hyderabad';
     const matched = coloniesList.find((c) => c.toLowerCase() === trimmed.toLowerCase());
     if (matched) {
-      router.push(`/locations/${targetCity}/${slugify(matched)}/`);
+      router.push(`/${targetCity}/${slugify(matched)}/`);
     } else {
-      router.push(`/locations/${targetCity}/other-location/?customArea=${encodeURIComponent(trimmed)}`);
+      router.push(`/${targetCity}/other-location/?customArea=${encodeURIComponent(trimmed)}`);
     }
   };
 
@@ -318,7 +318,7 @@ export default function ServiceCenterDetailView({
               const cSlug = slugify(colony);
               const colonyHref = baseLocationPath 
                 ? `${baseLocationPath}/`
-                : `/locations/${area.slug}/${cSlug}/`;
+                : `/${area.slug}/${cSlug}/`;
               return (
                 <Link
                   key={idx}
@@ -551,7 +551,6 @@ export default function ServiceCenterDetailView({
                     alt={`${cat.name} in ${displayTitle}`}
                     width={400}
                     height={220}
-                    priority
                   />
                   <div className="badge-tech-dispatch">
                     TECH DISPATCH

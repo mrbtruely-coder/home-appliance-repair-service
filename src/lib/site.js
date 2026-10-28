@@ -1,5 +1,5 @@
 export const SITE_NAME = 'Doorstep Service';
-export const SITE_URL = 'https://doorstepservices.example'; // Replace with your real domain before launch.
+export const SITE_URL = 'https://homeappliancerepairsservices.com';
 export const PHONE_DISPLAY = '9515661677';
 export const SERVICE_PRICE = 299;
 // Business-configurable checkout defaults. Confirm GST applicability/rate with your tax adviser before launch.
@@ -15,7 +15,7 @@ export const APP_STORE_URL =
   'https://apps.apple.com/in/app/doorstep-hub-all-your-needs/id6475340236';
 export const CITY = 'Hyderabad';
 export const DEFAULT_DESCRIPTION =
-  'Request same-day doorstep home appliance repair for AC, Refrigerator, Washing Machine, Oven, Geyser, and TV in Hyderabad. A certified technician arrives in 90 minutes. Call 9515661677.';
+  'Doorstep home appliance repair for AC, refrigerator, washing machine, microwave oven, geyser and TV in Hyderabad. Certified multi-brand technicians arrive in 60-90 minutes with genuine spare parts, transparent diagnosis and 90-day warranty. Call 9515661677.';
 export const AREAS = [
   {
     slug: 'hyderabad',

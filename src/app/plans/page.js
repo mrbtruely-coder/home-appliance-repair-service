@@ -15,6 +15,11 @@ export const metadata = pageMetadata({
     'home service membership Hyderabad',
     'AC annual maintenance contract Hyderabad',
     'refrigerator service plan Hyderabad',
+    'washing machine AMC Hyderabad',
+    'annual appliance maintenance Hyderabad',
+    'discount appliance service plans',
+    'home appliance warranty plan',
+    'appliance care membership Hyderabad',
   ],
 });
 

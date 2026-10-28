@@ -14,6 +14,9 @@ export const metadata = pageMetadata({
     'book refrigerator repair Hyderabad',
     'same day appliance repair booking Hyderabad',
     'doorstep technician dispatch Hyderabad',
+    'online appliance service booking',
+    'urgent home appliance technician Hyderabad',
+    'emergency appliance repair booking',
   ],
 });
 

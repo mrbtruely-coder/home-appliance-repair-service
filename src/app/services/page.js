@@ -19,8 +19,6 @@ export const metadata = pageMetadata({
     'smart TV repair Hyderabad',
     'same day appliance repair Hyderabad',
     'appliance service center Hyderabad',
-    'doorstep technician Hyderabad',
-    'appliance repair services near me Hyderabad',
   ],
 });
 

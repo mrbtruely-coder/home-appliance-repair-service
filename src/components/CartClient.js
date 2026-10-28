@@ -175,7 +175,7 @@ export default function CartClient() {
               Coverage is listed for Ameerpet Main Road, Chanda Nagar, Alwal and Suchitra. Your exact address and
               appointment slot need confirmation.
             </p>
-            <Link href="/locations/" className="text-link">
+            <Link href="/hyderabad/" className="text-link">
               Check service areas →
             </Link>
           </aside>

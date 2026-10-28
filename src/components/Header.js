@@ -285,7 +285,7 @@ export default function Header() {
                   {LOCATION_DROPDOWN_ITEMS.map((loc) => (
                     <Link
                       key={loc.slug}
-                      href={`/locations/${loc.slug}/`}
+                      href={`/${loc.slug}/`}
                       onClick={closeAllDropdowns}
                       className="dropdown-item-link"
                     >
@@ -301,7 +301,7 @@ export default function Header() {
                 </div>
                 <div className="dropdown-card-footer">
                   <Link
-                    href="/locations/"
+                    href="/service-center/"
                     onClick={closeAllDropdowns}
                     className="dropdown-footer-link"
                   >

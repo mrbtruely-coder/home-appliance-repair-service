@@ -9,7 +9,6 @@ export default function sitemap() {
   const staticRoutes = [
     '',
     '/services/',
-    '/locations/',
     '/booking/',
     '/about/',
     '/faqs/',
@@ -25,7 +24,35 @@ export default function sitemap() {
   ];
 
   const serviceRoutes = SERVICES.map((service) => `/services/${service.slug}/`);
-  const locationRoutes = AREAS.map((area) => `/locations/${area.slug}/`);
+  const locationRoutes = AREAS.map((area) => `/${area.slug}/`);
+  
+  // Include all sub-area and category pages for major hubs for industry-level SEO coverage
+  const subAreaRoutes = [];
+  const hubCities = AREAS.filter((a) => a.slug === 'hyderabad' || a.slug === 'secunderabad');
+  
+  function slugify(text) {
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      .replace(/\(.*?\)/g, '')
+      .replace(/&/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  hubCities.forEach((city) => {
+    const colonies = city.colonies || city.landmarks || [];
+    colonies.forEach((col) => {
+      const subSlug = slugify(col);
+      if (!subSlug || subSlug === 'other-location') return;
+      subAreaRoutes.push(`/${city.slug}/${subSlug}/`);
+      
+      SERVICES.forEach((service) => {
+        subAreaRoutes.push(`/${city.slug}/${subSlug}/${service.slug}/`);
+      });
+    });
+  });
+
   const articleRoutes = ARTICLES.map((article) => `/articles/${article.slug}/`);
   const planRoutes = MEMBERSHIP_PLANS.map((plan) => `/plans/${plan.slug}/`);
 
@@ -33,6 +60,7 @@ export default function sitemap() {
     ...staticRoutes,
     ...serviceRoutes,
     ...locationRoutes,
+    ...subAreaRoutes,
     ...articleRoutes,
     ...planRoutes,
   ].map((route) => ({

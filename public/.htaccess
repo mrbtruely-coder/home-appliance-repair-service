@@ -1,0 +1,26 @@
+# Disable Directory Browsing / Indexing to prevent Apache sort URLs (?C=N;O=D, ?C=M;O=A, etc.)
+Options -Indexes
+
+# Fallback for clean URL routing and HTML extension rewriting on Apache / cPanel
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Redirect /locations/* to root city /*
+  RewriteRule ^locations/(.*)$ /$1 [R=301,L]
+
+  # If an existing file or directory exists, serve directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Serve .html version if available
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.*)/?$ $1.html [L]
+
+  # Fallback to index.html for SPA routes
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+ErrorDocument 404 /404.html
+

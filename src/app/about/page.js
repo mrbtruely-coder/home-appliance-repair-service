@@ -9,6 +9,12 @@ export const metadata = pageMetadata({
     'appliance repair company Hyderabad',
     'home appliance service provider Hyderabad',
     'certified technician Hyderabad',
+    'doorstep appliance repair experts',
+    'verified repair engineers Hyderabad',
+    'appliance service center network',
+    'authorized multi-brand appliance care',
+    'reliable home technician Hyderabad',
+    'appliance maintenance company Hyderabad',
   ],
 });
 

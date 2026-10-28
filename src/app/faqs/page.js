@@ -12,6 +12,11 @@ export const metadata = pageMetadata({
     'doorstep appliance warranty',
     'AC repair cost Hyderabad',
     'doorstep service questions',
+    'refrigerator repair charges Hyderabad',
+    'washing machine repair rate card',
+    'appliance diagnostic fees Hyderabad',
+    'same day repair FAQ',
+    'appliance service warranty terms',
   ],
 });
 

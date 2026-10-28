@@ -11,6 +11,11 @@ export const metadata = pageMetadata({
     'call technician Hyderabad',
     'appliance repair customer care Hyderabad',
     'doorstep service phone number',
+    'emergency appliance support Hyderabad',
+    'appliance service center contact',
+    'technician phone number Hyderabad',
+    'whatsapp appliance service Hyderabad',
+    'doorstep repair enquiry Hyderabad',
   ],
 });
 

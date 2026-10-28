@@ -60,7 +60,7 @@ export default function LocationDropdownPopover({ isOpen, onClose }) {
                 <small>{area.landmarks.join(', ')} & nearby</small>
               </div>
               <Link
-                href={`/locations/${area.slug}/`}
+                href={`/${area.slug}/`}
                 className="location-view-link"
                 title={`View ${area.name} details`}
                 onClick={(e) => {

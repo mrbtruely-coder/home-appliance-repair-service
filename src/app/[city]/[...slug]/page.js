@@ -17,6 +17,8 @@ import { AREAS, SERVICES, PHONE_DISPLAY, PHONE_E164, WHATSAPP_URL, SERVICE_PRICE
 import { pageMetadata } from '@/lib/seo';
 import ServiceCenterDetailView from '@/components/ServiceCenterDetailView';
 import TwoStepBookingFlow from '@/components/TwoStepBookingFlow';
+import ClientBookingWrapper from '@/components/ClientBookingWrapper';
+import { notFound } from 'next/navigation';
 
 export function slugify(text) {
   if (!text) return '';
@@ -61,20 +63,15 @@ export function generateStaticParams() {
   const params = [];
   const added = new Set();
 
-  function addParam(slugArray) {
-    const key = slugArray.join('/');
+  function addParam(citySlug, slugArray) {
+    const key = `${citySlug}/${slugArray.join('/')}`;
     if (!added.has(key)) {
       added.add(key);
-      params.push({ slug: slugArray });
+      params.push({ city: citySlug, slug: slugArray });
     }
   }
 
-  // 1. Single segment areas
-  AREAS.forEach((a) => {
-    addParam([a.slug]);
-  });
-
-  // 2. Multi-segment combinations for Hyderabad and Secunderabad
+  // Multi-segment combinations for Hyderabad and Secunderabad
   const hubCities = AREAS.filter((a) => a.slug === 'hyderabad' || a.slug === 'secunderabad');
 
   hubCities.forEach((city) => {
@@ -83,23 +80,23 @@ export function generateStaticParams() {
       const subSlug = slugify(col);
       if (!subSlug) return;
 
-      // Level 2: [city, subArea]
-      addParam([city.slug, subSlug]);
+      // Level 2: [city, subArea] -> /[city]/[subArea]/
+      addParam(city.slug, [subSlug]);
 
       SERVICES.forEach((cat) => {
-        // Level 3: [city, subArea, category]
-        addParam([city.slug, subSlug, cat.slug]);
+        // Level 3: [city, subArea, category] -> /[city]/[subArea]/[category]/
+        addParam(city.slug, [subSlug, cat.slug]);
 
         const subcats = cat.subcategories || [];
         subcats.forEach((sub) => {
           const fullSubSlug = slugify(sub.slug || sub.name || sub.id);
           if (!fullSubSlug) return;
 
-          // Level 4: [city, subArea, category, subcategory]
-          addParam([city.slug, subSlug, cat.slug, fullSubSlug]);
+          // Level 4: [city, subArea, category, subcategory] -> /[city]/[subArea]/[category]/[subCategory]/
+          addParam(city.slug, [subSlug, cat.slug, fullSubSlug]);
 
           // Level 5: [city, subArea, category, subcategory, 'book']
-          addParam([city.slug, subSlug, cat.slug, fullSubSlug, 'book']);
+          addParam(city.slug, [subSlug, cat.slug, fullSubSlug, 'book']);
         });
       });
     });
@@ -109,93 +106,127 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
+  const { city: citySlug, slug } = await params;
   const slugArray = Array.isArray(slug) ? slug : [slug];
-  const citySlug = slugArray[0];
   const city = AREAS.find((a) => a.slug === citySlug) || AREAS[0];
 
-  if (slugArray.length === 1) {
-    return pageMetadata({
-      title: `Home Appliance Repair in ${city.name} | Doorstep Service (10 KM Radius)`,
-      description: `Official doorstep appliance service center in ${city.name}. Certified technicians arrive in 60-90 minutes. Call ${PHONE_DISPLAY}.`,
-      path: `/locations/${city.slug}/`,
-    });
-  }
-
-  const subSlug = slugArray[1];
+  const subSlug = slugArray[0];
   const colonies = city.colonies || city.landmarks || [];
   const subAreaName = colonies.find((c) => slugify(c) === subSlug) || subSlug.replace(/-/g, ' ');
 
-  if (slugArray.length === 2) {
+  if (slugArray.length === 1) {
     return pageMetadata({
       title: `Doorstep Home Appliance Repair in ${subAreaName}, ${city.name} | 60-90 Min Dispatch`,
       description: `Same-day doorstep appliance service in ${subAreaName}, ${city.name}. AC, Refrigerator, Washing Machine, Microwave, Geyser & TV repairs. Call ${PHONE_DISPLAY}.`,
-      path: `/locations/${city.slug}/${subSlug}/`,
+      path: `/${city.slug}/${subSlug}/`,
+      keywords: [
+        `appliance repair in ${subAreaName}`,
+        `home appliance service ${subAreaName}`,
+        `doorstep technician in ${subAreaName}`,
+        `AC repair ${subAreaName}`,
+        `refrigerator service ${subAreaName}`,
+        `washing machine repair ${subAreaName}`,
+        `microwave repair in ${subAreaName}`,
+        `geyser repair ${subAreaName}`,
+        `TV repair in ${subAreaName}`,
+        `same day repair ${subAreaName} ${city.name}`,
+      ],
     });
   }
 
-  const rawCat = slugArray[2];
+  const rawCat = slugArray[1];
   const canonicalCatSlug = CATEGORY_MAP[rawCat] || rawCat;
   const category = SERVICES.find((s) => s.slug === canonicalCatSlug) || SERVICES[0];
 
-  if (slugArray.length === 3) {
+  if (slugArray.length === 2) {
     return pageMetadata({
       title: `${category.name} in ${subAreaName}, ${city.name} | Doorstep Repair`,
       description: `Fast ${category.name} in ${subAreaName}, ${city.name}. Multi-brand expert technicians with genuine parts and 90-day warranty. Call ${PHONE_DISPLAY}.`,
-      path: `/locations/${city.slug}/${subSlug}/${rawCat}/`,
+      path: `/${city.slug}/${subSlug}/${rawCat}/`,
+      keywords: [
+        `${category.name} in ${subAreaName}`,
+        `${category.name.toLowerCase()} service ${subAreaName}`,
+        `doorstep ${category.name.toLowerCase()} ${subAreaName}`,
+        `best ${category.name.toLowerCase()} technician ${subAreaName}`,
+        `${category.name.toLowerCase()} repair near me ${subAreaName}`,
+        `emergency ${category.name.toLowerCase()} ${city.name}`,
+        `same day ${category.name.toLowerCase()} ${subAreaName}`,
+        `certified ${category.name.toLowerCase()} technician`,
+        `${category.name.toLowerCase()} service center ${subAreaName}`,
+        `affordable ${category.name.toLowerCase()} in ${city.name}`,
+      ],
     });
   }
 
-  const rawSub = slugArray[3];
+  const rawSub = slugArray[2];
   const subcats = category.subcategories || [];
   const subcategory = subcats.find((s) => slugify(s.slug || s.name || s.id).includes(slugify(rawSub))) || subcats[0];
 
-  if (slugArray.length === 4) {
+  if (slugArray.length === 3) {
     return pageMetadata({
       title: `${subcategory.name} in ${subAreaName}, ${city.name} | Certified Technician`,
       description: `Expert ${subcategory.name} in ${subAreaName}, ${city.name}. Genuine replacement parts, transparent diagnostics, and 90-day warranty. Call ${PHONE_DISPLAY}.`,
-      path: `/locations/${city.slug}/${subSlug}/${rawCat}/${rawSub}/`,
+      path: `/${city.slug}/${subSlug}/${rawCat}/${rawSub}/`,
+      keywords: [
+        `${subcategory.name} in ${subAreaName}`,
+        `${subcategory.name.toLowerCase()} ${city.name}`,
+        `doorstep ${subcategory.name.toLowerCase()} ${subAreaName}`,
+        `${subcategory.name.toLowerCase()} repair service`,
+        `${subcategory.name.toLowerCase()} specialist near me`,
+        `fast ${subcategory.name.toLowerCase()} in ${subAreaName}`,
+        `reliable ${subcategory.name.toLowerCase()} technician`,
+        `${subcategory.name.toLowerCase()} cost in ${city.name}`,
+        `emergency ${subcategory.name.toLowerCase()} repair`,
+        `same day ${subcategory.name.toLowerCase()} ${subAreaName}`,
+      ],
     });
   }
 
   return pageMetadata({
     title: `Book ${subcategory.name} in ${subAreaName}, ${city.name} | Fast Dispatch`,
     description: `Book same-day ${subcategory.name} in ${subAreaName}, ${city.name}. Certified technician arrives in 90 minutes. Call ${PHONE_DISPLAY}.`,
-    path: `/locations/${city.slug}/${subSlug}/${rawCat}/${rawSub}/book/`,
+    path: `/${city.slug}/${subSlug}/${rawCat}/${rawSub}/book/`,
+    keywords: [
+      `book ${subcategory.name.toLowerCase()} in ${subAreaName}`,
+      `schedule ${subcategory.name.toLowerCase()} ${city.name}`,
+      `order ${subcategory.name.toLowerCase()} repair`,
+      `online booking ${subcategory.name.toLowerCase()}`,
+      `doorstep ${subcategory.name.toLowerCase()} booking`,
+      `${subcategory.name.toLowerCase()} appointment ${subAreaName}`,
+      `fast technician dispatch ${subAreaName}`,
+      `instant booking ${subcategory.name.toLowerCase()}`,
+      `same day ${subcategory.name.toLowerCase()} booking`,
+      `verified technician ${subAreaName} ${city.name}`,
+    ],
   });
 }
 
-function resolveInfo(slugArray) {
-  const citySlug = slugArray[0];
+function resolveInfo(citySlug, slugArray) {
   const city = AREAS.find((a) => a.slug === citySlug) || AREAS[0];
 
-  if (slugArray.length === 1) {
-    return { level: 1, city };
-  }
-
-  const subSlug = slugArray[1];
+  const subSlug = slugArray[0];
   const colonies = city.colonies || city.landmarks || [];
   let subAreaName = colonies.find((c) => slugify(c) === subSlug);
   if (!subAreaName) {
     subAreaName = decodeURIComponent(subSlug).replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   }
 
-  if (slugArray.length === 2) {
+  if (slugArray.length === 1) {
     return { level: 2, city, subSlug, subAreaName };
   }
 
-  const rawCat = slugArray[2];
+  const rawCat = slugArray[1];
   const canonicalCatSlug = CATEGORY_MAP[rawCat] || rawCat;
   const category = SERVICES.find((s) => s.slug === canonicalCatSlug) || SERVICES[0];
 
-  if (slugArray.length === 3) {
+  if (slugArray.length === 2) {
     if (rawCat === 'book') {
       return { level: 5, city, subSlug, subAreaName, category: SERVICES[0] };
     }
     return { level: 3, city, subSlug, subAreaName, category, rawCat };
   }
 
-  const rawSub = slugArray[3];
+  const rawSub = slugArray[2];
   if (rawSub === 'book') {
     return { level: 5, city, subSlug, subAreaName, category };
   }
@@ -207,24 +238,25 @@ function resolveInfo(slugArray) {
     return sSlug === cleanRaw || sSlug.includes(cleanRaw) || cleanRaw.includes(sSlug);
   }) || subcategories[0];
 
-  if (slugArray.length === 4) {
+  if (slugArray.length === 3) {
     return { level: 4, city, subSlug, subAreaName, category, subcategory, rawSub, rawCat };
   }
 
   return { level: 5, city, subSlug, subAreaName, category, subcategory, rawSub, rawCat };
 }
 
-export default async function LocationCatchAllPage({ params }) {
-  const { slug } = await params;
-  const slugArray = Array.isArray(slug) ? slug : [slug];
-  const info = resolveInfo(slugArray);
+export default async function SubAreaCatchAllPage({ params }) {
+  try {
+    const { city: citySlug, slug } = await params;
+    const validCity = AREAS.some((a) => a.slug === citySlug);
+    if (!validCity) {
+      notFound();
+    }
 
-  // LEVEL 1: City Hub Overview Page (e.g. /locations/secunderabad)
-  if (info.level === 1) {
-    return <ServiceCenterDetailView area={info.city} />;
-  }
+    const slugArray = Array.isArray(slug) ? slug : [slug];
+    const info = resolveInfo(citySlug, slugArray);
 
-  // LEVEL 5: Dedicated Booking Page (e.g. /locations/secunderabad/alwal/oven/convectional-oven/book)
+  // LEVEL 5: Dedicated Booking Page (e.g. /secunderabad/alwal/oven/convectional-oven/book)
   if (info.level === 5) {
     const applianceId = info.category ? APPLIANCE_ID_MAP[info.category.slug] || 'ac' : 'ac';
     const subcatId = info.subcategory ? (info.subcategory.id || slugify(info.subcategory.name)) : '';
@@ -235,15 +267,13 @@ export default async function LocationCatchAllPage({ params }) {
           <div style={{ marginBottom: '20px', fontSize: '13px', color: '#64748B' }}>
             <Link href="/" style={{ color: '#64748B', textDecoration: 'none' }}>Home</Link>
             <span style={{ margin: '0 8px' }}>&gt;</span>
-            <Link href="/locations/" style={{ color: '#64748B', textDecoration: 'none' }}>Locations</Link>
+            <Link href={`/${info.city.slug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.city.name}</Link>
             <span style={{ margin: '0 8px' }}>&gt;</span>
-            <Link href={`/locations/${info.city.slug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.city.name}</Link>
-            <span style={{ margin: '0 8px' }}>&gt;</span>
-            <Link href={`/locations/${info.city.slug}/${info.subSlug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.subAreaName}</Link>
+            <Link href={`/${info.city.slug}/${info.subSlug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.subAreaName}</Link>
             {info.category && (
               <>
                 <span style={{ margin: '0 8px' }}>&gt;</span>
-                <Link href={`/locations/${info.city.slug}/${info.subSlug}/${info.rawCat || info.category.slug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.category.name}</Link>
+                <Link href={`/${info.city.slug}/${info.subSlug}/${info.rawCat || info.category.slug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.category.name}</Link>
               </>
             )}
             <span style={{ margin: '0 8px' }}>&gt;</span>
@@ -283,7 +313,7 @@ export default async function LocationCatchAllPage({ params }) {
             </p>
           </div>
 
-          <TwoStepBookingFlow
+          <ClientBookingWrapper
             initialAppliance={applianceId}
             initialSubcategory={subcatId}
             initialArea={info.subAreaName}
@@ -294,9 +324,9 @@ export default async function LocationCatchAllPage({ params }) {
     );
   }
 
-  // LEVEL 4: Sub-Category Detail View (e.g. /locations/secunderabad/alwal/oven/convectional-oven)
+  // LEVEL 4: Sub-Category Detail View (e.g. /secunderabad/alwal/oven/convectional-oven)
   if (info.level === 4) {
-    const bookUrl = `/locations/${info.city.slug}/${info.subSlug}/${info.rawCat}/${info.rawSub}/book/`;
+    const bookUrl = `/${info.city.slug}/${info.subSlug}/${info.rawCat}/${info.rawSub}/book/`;
 
     return (
       <div style={{ background: '#F8FAFC', minHeight: '100vh', padding: '36px 0 60px' }}>
@@ -304,13 +334,11 @@ export default async function LocationCatchAllPage({ params }) {
           <div style={{ marginBottom: '24px', fontSize: '13px', color: '#64748B' }}>
             <Link href="/" style={{ color: '#64748B', textDecoration: 'none' }}>Home</Link>
             <span style={{ margin: '0 8px' }}>&gt;</span>
-            <Link href="/locations/" style={{ color: '#64748B', textDecoration: 'none' }}>Locations</Link>
+            <Link href={`/${info.city.slug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.city.name}</Link>
             <span style={{ margin: '0 8px' }}>&gt;</span>
-            <Link href={`/locations/${info.city.slug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.city.name}</Link>
+            <Link href={`/${info.city.slug}/${info.subSlug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.subAreaName}</Link>
             <span style={{ margin: '0 8px' }}>&gt;</span>
-            <Link href={`/locations/${info.city.slug}/${info.subSlug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.subAreaName}</Link>
-            <span style={{ margin: '0 8px' }}>&gt;</span>
-            <Link href={`/locations/${info.city.slug}/${info.subSlug}/${info.rawCat}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.category.name}</Link>
+            <Link href={`/${info.city.slug}/${info.subSlug}/${info.rawCat}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.category.name}</Link>
             <span style={{ margin: '0 8px' }}>&gt;</span>
             <span style={{ color: '#0A2558', fontWeight: 700 }}>{info.subcategory.name}</span>
           </div>
@@ -457,7 +485,7 @@ export default async function LocationCatchAllPage({ params }) {
     );
   }
 
-  // LEVEL 3: Service Category Page (e.g. /locations/secunderabad/alwal/oven)
+  // LEVEL 3: Service Category Page (e.g. /secunderabad/alwal/oven)
   if (info.level === 3) {
     const subcats = info.category.subcategories || [];
 
@@ -467,11 +495,9 @@ export default async function LocationCatchAllPage({ params }) {
           <div style={{ marginBottom: '24px', fontSize: '13px', color: '#64748B' }}>
             <Link href="/" style={{ color: '#64748B', textDecoration: 'none' }}>Home</Link>
             <span style={{ margin: '0 8px' }}>&gt;</span>
-            <Link href="/locations/" style={{ color: '#64748B', textDecoration: 'none' }}>Locations</Link>
+            <Link href={`/${info.city.slug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.city.name}</Link>
             <span style={{ margin: '0 8px' }}>&gt;</span>
-            <Link href={`/locations/${info.city.slug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.city.name}</Link>
-            <span style={{ margin: '0 8px' }}>&gt;</span>
-            <Link href={`/locations/${info.city.slug}/${info.subSlug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.subAreaName}</Link>
+            <Link href={`/${info.city.slug}/${info.subSlug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.subAreaName}</Link>
             <span style={{ margin: '0 8px' }}>&gt;</span>
             <span style={{ color: '#0A2558', fontWeight: 700 }}>{info.category.name}</span>
           </div>
@@ -512,8 +538,8 @@ export default async function LocationCatchAllPage({ params }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
             {subcats.map((sub) => {
               const subSlug = slugify(sub.slug || sub.name || sub.id);
-              const subDetailUrl = `/locations/${info.city.slug}/${info.subSlug}/${info.rawCat}/${subSlug}/`;
-              const subBookUrl = `/locations/${info.city.slug}/${info.subSlug}/${info.rawCat}/${subSlug}/book/`;
+              const subDetailUrl = `/${info.city.slug}/${info.subSlug}/${info.rawCat}/${subSlug}/`;
+              const subBookUrl = `/${info.city.slug}/${info.subSlug}/${info.rawCat}/${subSlug}/book/`;
 
               return (
                 <div
@@ -588,8 +614,7 @@ export default async function LocationCatchAllPage({ params }) {
     );
   }
 
-  // LEVEL 2: Sub-Area Page (e.g. /locations/secunderabad/prakash-nagar-metro)
-  // This is the dedicated Category Service Selection Page for this sub-area
+  // LEVEL 2: Sub-Area Page (e.g. /secunderabad/prakash-nagar-metro)
   const otherColonies = (info.city.colonies || info.city.landmarks || []).filter(
     (c) => slugify(c) !== info.subSlug && c !== 'Other Location' && c !== 'other-location'
   );
@@ -601,9 +626,7 @@ export default async function LocationCatchAllPage({ params }) {
         <div style={{ marginBottom: '24px', fontSize: '13px', color: '#64748B' }}>
           <Link href="/" style={{ color: '#64748B', textDecoration: 'none' }}>Home</Link>
           <span style={{ margin: '0 8px' }}>&gt;</span>
-          <Link href="/locations/" style={{ color: '#64748B', textDecoration: 'none' }}>Locations</Link>
-          <span style={{ margin: '0 8px' }}>&gt;</span>
-          <Link href={`/locations/${info.city.slug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.city.name}</Link>
+          <Link href={`/${info.city.slug}/`} style={{ color: '#64748B', textDecoration: 'none' }}>{info.city.name}</Link>
           <span style={{ margin: '0 8px' }}>&gt;</span>
           <span style={{ color: '#0A2558', fontWeight: 700 }}>{info.subAreaName}</span>
         </div>
@@ -679,7 +702,7 @@ export default async function LocationCatchAllPage({ params }) {
         }}>
           {SERVICES.map((cat) => {
             const catShort = APPLIANCE_ID_MAP[cat.slug] || cat.slug;
-            const catUrl = `/locations/${info.city.slug}/${info.subSlug}/${catShort}/`;
+            const catUrl = `/${info.city.slug}/${info.subSlug}/${catShort}/`;
 
             return (
               <Link
@@ -699,13 +722,12 @@ export default async function LocationCatchAllPage({ params }) {
                 }}
               >
                 {/* Photo with Badges */}
-                <div style={{ position: 'relative', width: '100%', height: '190px', background: '#E2E8F0' }}>
-                  <Image
+                <div style={{ position: 'relative', width: '100%', height: '190px', background: '#E2E8F0', overflow: 'hidden' }}>
+                  <img
                     src={cat.image}
                     alt={`${cat.name} in ${info.subAreaName}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    loading="lazy"
                   />
                   <div style={{
                     position: 'absolute',
@@ -897,7 +919,7 @@ export default async function LocationCatchAllPage({ params }) {
                 return (
                   <Link
                     key={colony}
-                    href={`/locations/${info.city.slug}/${cSlug}/`}
+                    href={`/${info.city.slug}/${cSlug}/`}
                     style={{
                       background: '#F8FAFC',
                       border: '1px solid #E2E8F0',
@@ -914,7 +936,7 @@ export default async function LocationCatchAllPage({ params }) {
                 );
               })}
               <Link
-                href={`/locations/${info.city.slug}/other-location/`}
+                href={`/${info.city.slug}/other-location/`}
                 style={{
                   background: '#FFF4EC',
                   border: '1px solid #FFCCA3',
@@ -934,4 +956,8 @@ export default async function LocationCatchAllPage({ params }) {
       </div>
     </div>
   );
+  } catch (err) {
+    console.error('*** PRERENDER_FAILED_REASON ***:', err?.message || err, err?.stack || '');
+    throw err;
+  }
 }

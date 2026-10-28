@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import {
   User,
   Phone,
@@ -24,86 +24,163 @@ import {
   Edit3,
   Wrench,
   FileText,
+  X,
+  Search,
 } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import { AREAS, PHONE_DISPLAY, PHONE_E164, WHATSAPP_URL, SERVICE_PRICE, CITY } from '@/lib/site';
 
-// Pixel-perfect SVG Appliance Icons matching the screenshot
+// Pixel-perfect SVG Appliance Icons matching the reference image exactly
 function AcIcon({ size = 28, color = 'currentColor' }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="4" width="20" height="9" rx="2" />
-      <line x1="6" y1="9" x2="10" y2="9" />
-      <circle cx="18" cy="8.5" r="0.7" fill={color} />
-      {/* Airflow waves */}
-      <path d="M5 16c1.5 1.5 2.5 1.5 4 0" />
-      <path d="M10 16c1.5 1.5 2.5 1.5 4 0" />
-      <path d="M15 16c1.5 1.5 2.5 1.5 4 0" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3.5" width="20" height="7" rx="2" />
+      <line x1="5.5" y1="7" x2="8.5" y2="7" />
+      <circle cx="18" cy="7" r="0.8" fill={color} />
+      {/* Downward airflow curve brackets */}
+      <path d="M7 14.5c0 2.5-1.5 4-3 4.5" />
+      <path d="M12 14v6.5" />
+      <path d="M17 14.5c0 2.5 1.5 4 3 4.5" />
     </svg>
   );
 }
 
 function FridgeIcon({ size = 28, color = 'currentColor' }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="5" y="2" width="14" height="20" rx="2" />
-      <line x1="5" y1="9" x2="19" y2="9" />
-      <line x1="8" y1="5" x2="8" y2="7" />
-      <line x1="8" y1="12" x2="8" y2="15" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4.5" y="2.5" width="15" height="19" rx="2.5" />
+      <line x1="4.5" y1="9" x2="19.5" y2="9" />
+      <line x1="7.5" y1="5.5" x2="7.5" y2="7.5" />
+      <line x1="7.5" y1="12" x2="7.5" y2="15.5" />
     </svg>
   );
 }
 
 function WashingMachineIcon({ size = 28, color = 'currentColor' }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="4" y="2" width="16" height="20" rx="2" />
-      <circle cx="12" cy="13" r="5" />
-      <path d="M12 10.5a2.5 2.5 0 0 1 2.5 2.5" />
-      <circle cx="7.5" cy="5.5" r="1" fill={color} />
-      <line x1="12" y1="5.5" x2="16.5" y2="5.5" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3.5" y="2.5" width="17" height="19" rx="3" />
+      <circle cx="12" cy="13" r="4.5" />
+      {/* Wave / inner drum ripple */}
+      <path d="M10 11.5a2.5 2.5 0 0 1 3.5 2" />
+      <circle cx="7" cy="5.8" r="0.9" fill={color} />
+      <circle cx="10" cy="5.8" r="0.9" fill={color} />
+      <line x1="13.5" y1="5.8" x2="17" y2="5.8" />
     </svg>
   );
 }
 
 function OvenIcon({ size = 28, color = 'currentColor' }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="4" width="20" height="16" rx="2" />
-      <rect x="5" y="8" width="10" height="8" rx="1" />
-      <circle cx="18" cy="9" r="1" fill={color} />
-      <circle cx="18" cy="14" r="1" fill={color} />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2.5" y="4" width="19" height="16" rx="2.5" />
+      <rect x="5" y="7.5" width="10" height="9" rx="1.5" />
+      <line x1="17.5" y1="8" x2="18.5" y2="8" />
+      <line x1="17.5" y1="11.5" x2="18.5" y2="11.5" />
+      <line x1="17.5" y1="15" x2="18.5" y2="15" />
     </svg>
   );
 }
 
 function GeyserIcon({ size = 28, color = 'currentColor' }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
-      <circle cx="12" cy="10" r="3" />
-      <line x1="9" y1="20" x2="9" y2="23" />
-      <line x1="15" y1="20" x2="15" y2="23" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="6" y="2.5" width="12" height="16.5" rx="6" />
+      <line x1="9" y1="19" x2="9" y2="22.5" />
+      <line x1="15" y1="19" x2="15" y2="22.5" />
+      {/* Thermometer / pilot indicator */}
+      <line x1="12" y1="6.5" x2="12" y2="10" />
+      <circle cx="12" cy="11.5" r="1.2" fill={color} />
     </svg>
   );
 }
 
 function TvIcon({ size = 28, color = 'currentColor' }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="6" width="20" height="13" rx="2" />
-      <polyline points="17 2 12 6 7 2" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2.5" y="4" width="19" height="13.5" rx="2" />
+      {/* TV Stand Legs */}
+      <line x1="6.5" y1="20.5" x2="9" y2="17.5" />
+      <line x1="17.5" y1="20.5" x2="15" y2="17.5" />
+      {/* Play triangle inside screen */}
+      <polygon points="10,8 15,10.75 10,13.5" fill={color} stroke="none" />
     </svg>
   );
 }
 
 const APPLIANCES = [
-  { id: 'ac', name: 'AC SERVICE', icon: AcIcon },
-  { id: 'refrigerator', name: 'REFRIGERATOR', icon: FridgeIcon },
-  { id: 'washing-machine', name: 'WASHING MACHINE', icon: WashingMachineIcon },
-  { id: 'oven', name: 'OVEN / MICROWAVE', icon: OvenIcon },
-  { id: 'geyser', name: 'GEYSER / HEATER', icon: GeyserIcon },
-  { id: 'tv', name: 'LED / SMART TV', icon: TvIcon },
+  {
+    id: 'ac',
+    name: 'AC SERVICE',
+    icon: AcIcon,
+    bg: '#F0F9FF',
+    border: '#BAE6FD',
+    iconColor: '#0284C7',
+    iconBg: '#FFFFFF',
+    badgeBg: '#E0F2FE',
+    badgeColor: '#0284C7',
+    badgeBorder: '#BAE6FD',
+  },
+  {
+    id: 'refrigerator',
+    name: 'REFRIGERATOR',
+    icon: FridgeIcon,
+    bg: '#F0FDF4',
+    border: '#BBF7D0',
+    iconColor: '#0D9488',
+    iconBg: '#FFFFFF',
+    badgeBg: '#DCFCE7',
+    badgeColor: '#0D9488',
+    badgeBorder: '#BBF7D0',
+  },
+  {
+    id: 'washing-machine',
+    name: 'WASHING MACHINE',
+    icon: WashingMachineIcon,
+    bg: '#F5F3FF',
+    border: '#DDD6FE',
+    iconColor: '#4F46E5',
+    iconBg: '#FFFFFF',
+    badgeBg: '#EDE9FE',
+    badgeColor: '#4F46E5',
+    badgeBorder: '#DDD6FE',
+  },
+  {
+    id: 'oven',
+    name: 'OVEN / MICROWAVE',
+    icon: OvenIcon,
+    bg: '#FFF7ED',
+    border: '#FED7AA',
+    iconColor: '#EA580C',
+    iconBg: '#FFFFFF',
+    badgeBg: '#FFEDD5',
+    badgeColor: '#EA580C',
+    badgeBorder: '#FED7AA',
+  },
+  {
+    id: 'geyser',
+    name: 'GEYSER / HEATER',
+    icon: GeyserIcon,
+    bg: '#FEFCE8',
+    border: '#FEF08A',
+    iconColor: '#D97706',
+    iconBg: '#FFFFFF',
+    badgeBg: '#FEF9C3',
+    badgeColor: '#D97706',
+    badgeBorder: '#FEF08A',
+  },
+  {
+    id: 'tv',
+    name: 'LED / SMART TV',
+    icon: TvIcon,
+    bg: '#F5F3FF',
+    border: '#DDD6FE',
+    iconColor: '#7C3AED',
+    iconBg: '#FFFFFF',
+    badgeBg: '#EDE9FE',
+    badgeColor: '#7C3AED',
+    badgeBorder: '#DDD6FE',
+  },
 ];
 
 const APPLIANCE_SUBCATEGORIES = {
@@ -321,6 +398,50 @@ export default function TwoStepBookingFlow({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [isCustomArea, setIsCustomArea] = useState(false);
+  const [detectedColonies, setDetectedColonies] = useState([]);
+
+  // Searchable Dropdown States for City & Sub-Area
+  const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
+  const [citySearchQuery, setCitySearchQuery] = useState('');
+  const cityDropdownRef = useRef(null);
+
+  const [subAreaDropdownOpen, setSubAreaDropdownOpen] = useState(false);
+  const [subAreaSearchQuery, setSubAreaSearchQuery] = useState('');
+  const subAreaDropdownRef = useRef(null);
+
+  // Close dropdowns on click outside
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (cityDropdownRef.current && !cityDropdownRef.current.contains(e.target)) {
+        setCityDropdownOpen(false);
+      }
+      if (subAreaDropdownRef.current && !subAreaDropdownRef.current.contains(e.target)) {
+        setSubAreaDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Filtered Cities based on search query
+  const filteredCities = useMemo(() => {
+    const all = Object.keys(CITY_DATA);
+    if (!citySearchQuery.trim()) return all;
+    const q = citySearchQuery.toLowerCase().trim();
+    return all.filter((c) => c.toLowerCase().includes(q));
+  }, [citySearchQuery]);
+
+  // Filtered Sub-Areas / Colonies based on search query
+  const filteredSubAreas = useMemo(() => {
+    if (!selectedCity) return [];
+    const baseColonies = CITY_DATA[selectedCity]?.colonies || [];
+    const combined = [...detectedColonies, ...baseColonies.filter((c) => !detectedColonies.includes(c))];
+    if (!subAreaSearchQuery.trim()) return combined;
+    const q = subAreaSearchQuery.toLowerCase().trim();
+    return combined.filter((col) => col.toLowerCase().includes(q));
+  }, [selectedCity, detectedColonies, subAreaSearchQuery]);
 
   // Dynamic Date & Time Slot Scheduling State
   const upcomingDays = useMemo(() => getUpcomingDays(7), []);
@@ -515,10 +636,12 @@ export default function TwoStepBookingFlow({
             setDetectedAddress(fullAddr || `${matchedColony}, ${finalCity}`);
             showToast(`📍 Location detected: ${matchedColony}, ${finalCity}`, 'success');
           } else if (foundLocality) {
-            setSelectedSubArea('__other__');
+            // Add detected locality directly into sub-area list for a seamless, compact layout
+            setDetectedColonies((prev) => (prev.includes(foundLocality) ? prev : [foundLocality, ...prev]));
+            setSelectedSubArea(foundLocality);
             setArea(foundLocality);
-            setIsCustomArea(true);
-            setCustomArea(foundLocality);
+            setIsCustomArea(false);
+            setCustomArea('');
             setDetectedAddress(fullAddr || `${foundLocality}, ${finalCity}`);
             showToast(`📍 Exact colony pinned: ${foundLocality}`, 'success');
           } else {
@@ -1041,11 +1164,53 @@ export default function TwoStepBookingFlow({
                             className={`appliance-tile-btn ${isSelected ? 'active' : ''} ${isUnselected ? 'is-unselected' : ''}`}
                             onClick={() => handleApplianceSelect(app.id)}
                             aria-pressed={isSelected}
+                            style={{
+                              background: isSelected ? '#FFF4EC' : app.bg,
+                              borderColor: isSelected ? '#FF6B00' : app.border,
+                              boxShadow: isSelected
+                                ? '0 8px 24px rgba(255, 107, 0, 0.24)'
+                                : '0 2px 10px rgba(0, 0, 0, 0.03)',
+                            }}
                           >
-                            <div className="appliance-tile-icon">
-                              <IconComponent size={26} color={isSelected ? '#FFFFFF' : (isUnselected ? '#94A3B8' : '#FF6B00')} />
+                            <div
+                              className="appliance-tile-icon"
+                              style={{
+                                background: isSelected ? '#FF6B00' : app.iconBg,
+                                borderColor: isSelected ? '#FF6B00' : app.border,
+                                color: isSelected ? '#FFFFFF' : app.iconColor,
+                                boxShadow: isSelected
+                                  ? '0 4px 14px rgba(255, 107, 0, 0.35)'
+                                  : '0 2px 6px rgba(0, 0, 0, 0.05)',
+                              }}
+                            >
+                              <IconComponent size={26} color={isSelected ? '#FFFFFF' : app.iconColor} />
                             </div>
-                            <span className="appliance-tile-name">{app.name}</span>
+                            <span
+                              className="appliance-tile-name"
+                              style={{
+                                color: '#0A2558',
+                                fontWeight: 800,
+                              }}
+                            >
+                              {app.name}
+                            </span>
+                            <span
+                              className="appliance-tile-price-badge"
+                              style={{
+                                display: 'inline-block',
+                                fontSize: '10.5px',
+                                fontWeight: 700,
+                                padding: '3px 10px',
+                                borderRadius: '20px',
+                                background: isSelected ? '#FFE8D6' : app.badgeBg,
+                                color: isSelected ? '#EA580C' : app.badgeColor,
+                                border: `1px solid ${isSelected ? '#FFCCA3' : app.badgeBorder}`,
+                                letterSpacing: '0.01em',
+                                transition: 'all 0.2s ease',
+                              }}
+                            >
+                              Starts from ₹299
+                            </span>
                           </button>
                         );
                       })}
@@ -1179,71 +1344,384 @@ export default function TwoStepBookingFlow({
                         </button>
                       </div>
 
-                      {/* Two Dropdowns Side by Side: City & Sub-Area */}
+                      {/* Two Dropdowns Side by Side: City & Sub-Area (with Search option) */}
                       <div className="locality-dropdowns-row">
-                        {/* 1. City Dropdown */}
-                        <div className="locality-select-wrap">
-                          <select
-                            value={selectedCity}
-                            onChange={(e) => {
-                              const newCity = e.target.value;
-                              setSelectedCity(newCity);
-                              setSelectedSubArea('');
-                              setIsCustomArea(false);
-                              setCustomArea('');
-                              setArea('');
-                              setDetectedAddress('');
+                        {/* 1. Searchable City Dropdown */}
+                        <div className="locality-select-wrap" ref={cityDropdownRef} style={{ position: 'relative' }}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCityDropdownOpen((prev) => !prev);
+                              setSubAreaDropdownOpen(false);
                             }}
-                            required
+                            className="locality-custom-trigger"
+                            style={{
+                              width: '100%',
+                              padding: '12px 36px 12px 14px',
+                              borderRadius: '12px',
+                              border: cityDropdownOpen ? '1.5px solid #00B4D8' : '1.5px solid #CBD5E1',
+                              background: '#FFFFFF',
+                              fontSize: '13.5px',
+                              fontWeight: 600,
+                              color: selectedCity ? '#0A2558' : '#94A3B8',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              textAlign: 'left',
+                              cursor: 'pointer',
+                              boxSizing: 'border-box',
+                              transition: 'all 0.2s ease',
+                              boxShadow: cityDropdownOpen ? '0 0 0 3px rgba(0, 180, 216, 0.15)' : 'none',
+                            }}
                           >
-                            <option value="">Select City...</option>
-                            {Object.keys(CITY_DATA).map((cityName) => (
-                              <option key={cityName} value={cityName}>
-                                {cityName}
-                              </option>
-                            ))}
-                          </select>
-                          <ChevronDown size={17} className="select-arrow" />
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {selectedCity || 'Select City...'}
+                            </span>
+                            <ChevronDown
+                              size={17}
+                              style={{
+                                color: '#0A2558',
+                                transform: cityDropdownOpen ? 'rotate(180deg)' : 'none',
+                                transition: 'transform 0.2s ease',
+                                flexShrink: 0,
+                              }}
+                            />
+                          </button>
+
+                          {/* City Search Menu Popup */}
+                          {cityDropdownOpen && (
+                            <div
+                              style={{
+                                position: 'absolute',
+                                top: 'calc(100% + 6px)',
+                                left: 0,
+                                right: 0,
+                                background: '#FFFFFF',
+                                borderRadius: '12px',
+                                border: '1.5px solid #CBD5E1',
+                                boxShadow: '0 12px 30px rgba(10, 37, 88, 0.14)',
+                                zIndex: 100,
+                                padding: '8px',
+                                maxHeight: '280px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '8px',
+                                  padding: '8px 10px',
+                                  background: '#F8FAFC',
+                                  borderRadius: '8px',
+                                  border: '1px solid #E2E8F0',
+                                  marginBottom: '6px',
+                                }}
+                              >
+                                <Search size={14} color="#64748B" style={{ flexShrink: 0 }} />
+                                <input
+                                  type="text"
+                                  autoFocus
+                                  placeholder="Search city..."
+                                  value={citySearchQuery}
+                                  onChange={(e) => setCitySearchQuery(e.target.value)}
+                                  onClick={(e) => e.stopPropagation()}
+                                  style={{
+                                    border: 'none',
+                                    outline: 'none',
+                                    background: 'transparent',
+                                    fontSize: '12.5px',
+                                    fontWeight: 600,
+                                    color: '#0A2558',
+                                    width: '100%',
+                                  }}
+                                />
+                                {citySearchQuery && (
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setCitySearchQuery('');
+                                    }}
+                                    style={{
+                                      background: 'none',
+                                      border: 'none',
+                                      padding: 0,
+                                      cursor: 'pointer',
+                                      color: '#94A3B8',
+                                    }}
+                                  >
+                                    <X size={13} />
+                                  </button>
+                                )}
+                              </div>
+
+                              <div style={{ overflowY: 'auto', flex: 1, maxHeight: '200px' }}>
+                                {filteredCities.length > 0 ? (
+                                  filteredCities.map((cityName) => {
+                                    const isSel = selectedCity === cityName;
+                                    return (
+                                      <div
+                                        key={cityName}
+                                        onClick={() => {
+                                          setSelectedCity(cityName);
+                                          setSelectedSubArea('');
+                                          setDetectedColonies([]);
+                                          setIsCustomArea(false);
+                                          setCustomArea('');
+                                          setArea('');
+                                          setDetectedAddress('');
+                                          setCityDropdownOpen(false);
+                                          setCitySearchQuery('');
+                                        }}
+                                        style={{
+                                          padding: '8px 10px',
+                                          fontSize: '13px',
+                                          fontWeight: isSel ? 700 : 500,
+                                          color: isSel ? '#00A8B5' : '#0A2558',
+                                          background: isSel ? '#F0FDFA' : 'transparent',
+                                          borderRadius: '6px',
+                                          cursor: 'pointer',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'space-between',
+                                          transition: 'background 0.15s ease',
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          if (!isSel) e.currentTarget.style.background = '#F1F5F9';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          if (!isSel) e.currentTarget.style.background = 'transparent';
+                                        }}
+                                      >
+                                        <span>{cityName}</span>
+                                        {isSel && <Check size={14} color="#00A8B5" />}
+                                      </div>
+                                    );
+                                  })
+                                ) : (
+                                  <div style={{ padding: '12px 10px', fontSize: '12px', color: '#94A3B8', textAlign: 'center' }}>
+                                    No cities found matching "{citySearchQuery}"
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
 
-                        {/* 2. Sub-Area / Colony Dropdown */}
-                        <div className="locality-select-wrap">
-                          <select
-                            value={isCustomArea ? '__other__' : selectedSubArea}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              if (val === '__other__') {
-                                setIsCustomArea(true);
-                                setSelectedSubArea('__other__');
-                                setArea('');
-                              } else {
-                                setIsCustomArea(false);
-                                setSelectedSubArea(val);
-                                setArea(val);
-                              }
-                              setDetectedAddress('');
-                            }}
+                        {/* 2. Searchable Sub-Area / Colony Dropdown */}
+                        <div className="locality-select-wrap" ref={subAreaDropdownRef} style={{ position: 'relative' }}>
+                          <button
+                            type="button"
                             disabled={!selectedCity}
-                            required
+                            onClick={() => {
+                              if (!selectedCity) return;
+                              setSubAreaDropdownOpen((prev) => !prev);
+                              setCityDropdownOpen(false);
+                            }}
+                            className="locality-custom-trigger"
+                            style={{
+                              width: '100%',
+                              padding: '12px 36px 12px 14px',
+                              borderRadius: '12px',
+                              border: subAreaDropdownOpen ? '1.5px solid #00B4D8' : '1.5px solid #CBD5E1',
+                              background: selectedCity ? '#FFFFFF' : '#F8FAFC',
+                              fontSize: '13.5px',
+                              fontWeight: 600,
+                              color: !selectedCity
+                                ? '#94A3B8'
+                                : selectedSubArea && selectedSubArea !== '__other__'
+                                ? '#0A2558'
+                                : isCustomArea
+                                ? '#0A2558'
+                                : '#94A3B8',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              textAlign: 'left',
+                              cursor: selectedCity ? 'pointer' : 'not-allowed',
+                              boxSizing: 'border-box',
+                              transition: 'all 0.2s ease',
+                              boxShadow: subAreaDropdownOpen ? '0 0 0 3px rgba(0, 180, 216, 0.15)' : 'none',
+                            }}
                           >
-                            <option value="">
-                              {selectedCity ? `Select Sub-Area in ${selectedCity}...` : 'Select City First...'}
-                            </option>
-                            {selectedCity &&
-                              (CITY_DATA[selectedCity]?.colonies || []).map((colony) => (
-                                <option key={colony} value={colony}>
-                                  {colony}
-                                </option>
-                              ))}
-                            {selectedCity && (
-                              <option value="__other__">📍 Other Sub-Area / Colony...</option>
-                            )}
-                          </select>
-                          <ChevronDown size={17} className="select-arrow" />
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {!selectedCity
+                                ? 'Select City First...'
+                                : isCustomArea
+                                ? `✏️ ${customArea || 'Other Sub-Area'}`
+                                : selectedSubArea
+                                ? (detectedColonies.includes(selectedSubArea) ? `📍 ${selectedSubArea} (Detected)` : selectedSubArea)
+                                : `Select Sub-Area in ${selectedCity}...`}
+                            </span>
+                            <ChevronDown
+                              size={17}
+                              style={{
+                                color: selectedCity ? '#0A2558' : '#94A3B8',
+                                transform: subAreaDropdownOpen ? 'rotate(180deg)' : 'none',
+                                transition: 'transform 0.2s ease',
+                                flexShrink: 0,
+                              }}
+                            />
+                          </button>
+
+                          {/* Sub-Area Search Menu Popup */}
+                          {subAreaDropdownOpen && selectedCity && (
+                            <div
+                              style={{
+                                position: 'absolute',
+                                top: 'calc(100% + 6px)',
+                                left: 0,
+                                right: 0,
+                                background: '#FFFFFF',
+                                borderRadius: '12px',
+                                border: '1.5px solid #CBD5E1',
+                                boxShadow: '0 12px 30px rgba(10, 37, 88, 0.14)',
+                                zIndex: 100,
+                                padding: '8px',
+                                maxHeight: '300px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '8px',
+                                  padding: '8px 10px',
+                                  background: '#F8FAFC',
+                                  borderRadius: '8px',
+                                  border: '1px solid #E2E8F0',
+                                  marginBottom: '6px',
+                                }}
+                              >
+                                <Search size={14} color="#64748B" style={{ flexShrink: 0 }} />
+                                <input
+                                  type="text"
+                                  autoFocus
+                                  placeholder={`Search sub-area in ${selectedCity}...`}
+                                  value={subAreaSearchQuery}
+                                  onChange={(e) => setSubAreaSearchQuery(e.target.value)}
+                                  onClick={(e) => e.stopPropagation()}
+                                  style={{
+                                    border: 'none',
+                                    outline: 'none',
+                                    background: 'transparent',
+                                    fontSize: '12.5px',
+                                    fontWeight: 600,
+                                    color: '#0A2558',
+                                    width: '100%',
+                                  }}
+                                />
+                                {subAreaSearchQuery && (
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setSubAreaSearchQuery('');
+                                    }}
+                                    style={{
+                                      background: 'none',
+                                      border: 'none',
+                                      padding: 0,
+                                      cursor: 'pointer',
+                                      color: '#94A3B8',
+                                    }}
+                                  >
+                                    <X size={13} />
+                                  </button>
+                                )}
+                              </div>
+
+                              <div style={{ overflowY: 'auto', flex: 1, maxHeight: '220px' }}>
+                                {filteredSubAreas.length > 0 ? (
+                                  filteredSubAreas.map((colony) => {
+                                    const isDetected = detectedColonies.includes(colony);
+                                    const isSel = !isCustomArea && selectedSubArea === colony;
+                                    return (
+                                      <div
+                                        key={colony}
+                                        onClick={() => {
+                                          setIsCustomArea(false);
+                                          setSelectedSubArea(colony);
+                                          setArea(colony);
+                                          setSubAreaDropdownOpen(false);
+                                          setSubAreaSearchQuery('');
+                                        }}
+                                        style={{
+                                          padding: '8px 10px',
+                                          fontSize: '13px',
+                                          fontWeight: isSel ? 700 : 500,
+                                          color: isSel ? '#00A8B5' : '#0A2558',
+                                          background: isSel ? '#F0FDFA' : 'transparent',
+                                          borderRadius: '6px',
+                                          cursor: 'pointer',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'space-between',
+                                          transition: 'background 0.15s ease',
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          if (!isSel) e.currentTarget.style.background = '#F1F5F9';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          if (!isSel) e.currentTarget.style.background = 'transparent';
+                                        }}
+                                      >
+                                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                          {isDetected ? `📍 ${colony} (Detected)` : colony}
+                                        </span>
+                                        {isSel && <Check size={14} color="#00A8B5" />}
+                                      </div>
+                                    );
+                                  })
+                                ) : (
+                                  <div style={{ padding: '12px 10px', fontSize: '12px', color: '#94A3B8', textAlign: 'center' }}>
+                                    No areas found matching "{subAreaSearchQuery}"
+                                  </div>
+                                )}
+
+                                {/* Option to Type Manually / Other */}
+                                <div
+                                  onClick={() => {
+                                    setIsCustomArea(true);
+                                    setSelectedSubArea('__other__');
+                                    setArea(customArea);
+                                    setSubAreaDropdownOpen(false);
+                                    setSubAreaSearchQuery('');
+                                  }}
+                                  style={{
+                                    borderTop: '1px solid #E2E8F0',
+                                    marginTop: '4px',
+                                    padding: '9px 10px',
+                                    fontSize: '12.5px',
+                                    fontWeight: 700,
+                                    color: '#FF6B00',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    background: isCustomArea ? '#FFF7ED' : 'transparent',
+                                    borderRadius: '6px',
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    if (!isCustomArea) e.currentTarget.style.background = '#FFF7ED';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    if (!isCustomArea) e.currentTarget.style.background = 'transparent';
+                                  }}
+                                >
+                                  ✏️ Other Sub-Area / Colony (Type Manually)...
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
 
-                      {/* Row 2: Manual Colony / Sub-Area Input (shown when 'Other Sub-Area / Colony...' is selected) */}
+                      {/* Row 2: Manual Colony / Sub-Area Input (only when user chooses 'Other Sub-Area') */}
                       {isCustomArea && (
                         <div className="subarea-manual-box">
                           <div className="subarea-manual-header">
@@ -1251,7 +1729,7 @@ export default function TwoStepBookingFlow({
                               SUB-AREA / COLONY IN {selectedCity ? selectedCity.toUpperCase() : 'YOUR CITY'} *
                             </label>
                             <span className="subarea-manual-hint">
-                              Enter manually or tap Auto Detect
+                              Enter your colony name
                             </span>
                           </div>
 
@@ -1259,53 +1737,21 @@ export default function TwoStepBookingFlow({
                             <MapPin size={17} className="subarea-input-pin" />
                             <input
                               type="text"
-                              placeholder="Enter colony manually or tap Auto Detect GPS..."
+                              placeholder="Enter your colony / area name..."
                               value={customArea}
                               onChange={(e) => {
                                 setCustomArea(e.target.value);
                                 setArea(e.target.value);
                               }}
                               className="subarea-text-input"
+                              style={{ paddingRight: '14px' }}
                               required
-                              autoFocus
                             />
-                            <button
-                              type="button"
-                              onClick={handleAutoDetectLocation}
-                              disabled={detectingLocation}
-                              className="subarea-autodetect-inner-btn"
-                              title="Auto-detect location using GPS"
-                            >
-                              {detectingLocation ? <Loader2 size={13} className="animate-spin" /> : <LocateFixed size={13} />}
-                              <span>{detectingLocation ? 'Detecting...' : 'Auto Detect'}</span>
-                            </button>
                           </div>
 
                           <div className="subarea-coverage-note">
                             <span style={{ color: '#FF6B00' }}>⚡</span> 10 KM Radial Coverage: Technicians dispatched to all colonies in {selectedCity || 'your city'}!
                           </div>
-                        </div>
-                      )}
-
-                      {detectedAddress && (
-                        <div
-                          style={{
-                            marginTop: '8px',
-                            fontSize: '11px',
-                            color: '#0A2558',
-                            background: '#EEF3FA',
-                            border: '1px solid #CBDDF5',
-                            padding: '6px 10px',
-                            borderRadius: '8px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                          }}
-                        >
-                          <Navigation size={13} color="#00A8B5" style={{ flexShrink: 0 }} />
-                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            Detected: <strong>{detectedAddress}</strong>
-                          </span>
                         </div>
                       )}
                     </div>

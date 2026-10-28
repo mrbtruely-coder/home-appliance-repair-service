@@ -2,5 +2,21 @@ import Link from 'next/link';
 import { ArrowUpRight, BookOpen, Clock3 } from 'lucide-react';
 import { ARTICLES } from '@/lib/articles';
 import { pageMetadata } from '@/lib/seo';
-export const metadata = pageMetadata({ title: 'Home Appliance Care Articles & Guides', description: 'Read practical home appliance maintenance guides and safe troubleshooting tips for ACs, refrigerators, washing machines and more in Hyderabad.', path: '/articles/', keywords: ['home appliance care tips Hyderabad','AC troubleshooting','refrigerator maintenance','washing machine repair guide'] });
+export const metadata = pageMetadata({
+  title: 'Home Appliance Care Articles & Guides | Doorstep Service',
+  description: 'Read practical home appliance maintenance guides and safe troubleshooting tips for ACs, refrigerators, washing machines and more in Hyderabad.',
+  path: '/articles/',
+  keywords: [
+    'home appliance care tips Hyderabad',
+    'AC troubleshooting guide',
+    'refrigerator maintenance tips',
+    'washing machine repair guide',
+    'microwave oven safety tips',
+    'geyser maintenance checklist',
+    'DIY appliance troubleshooting',
+    'appliance breakdown prevention',
+    'home appliance service articles',
+    'doorstep appliance repair advice',
+  ],
+});
 export default function ArticlesPage(){return <><section className="page-hero"><div className="container"><span className="eyebrow"><BookOpen size={14}/> DOORSTEP JOURNAL</span><h1>Practical advice for a<br/><em>better cared-for home.</em></h1><p>Simple appliance-care guides, safe first checks and helpful tips to prepare for a service visit.</p></div></section><section className="section"><div className="container"><div className="article-grid">{ARTICLES.map((article,index)=><article className="article-card" key={article.slug}><div className={`article-art article-art-${index+1}`}><span>{article.category}</span><BookOpen size={34}/></div><div className="article-card-body"><div className="article-meta"><span>{article.readTime}</span><span>Appliance care</span></div><h2><Link href={`/articles/${article.slug}/`}>{article.title}</Link></h2><p>{article.description}</p><Link className="text-link" href={`/articles/${article.slug}/`}>Read article <ArrowUpRight size={15}/></Link></div></article>)}</div><div className="article-help-cta"><div><span className="eyebrow">NEED HANDS-ON HELP?</span><h2>When a simple check is not enough</h2><p>Choose your appliance and send an enquiry. The team will confirm area coverage, timing and service scope.</p></div><Link className="button button-primary" href="/services/">Explore services <ArrowUpRight size={16}/></Link></div></div></section></>}

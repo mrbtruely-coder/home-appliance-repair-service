@@ -13,7 +13,7 @@ export const metadata = pageMetadata({
 
 const topics = [
   { icon: CalendarClock, title: 'Booking & time slots', text: 'Choose a preferred date and morning, afternoon or evening window. A slot is only confirmed when the team responds.', href: '/booking/' },
-  { icon: MapPin, title: 'Service availability', text: 'Check the listed Hyderabad areas and ask us to verify coverage for your exact address before confirming.', href: '/locations/' },
+  { icon: MapPin, title: 'Service availability', text: 'Check the listed Hyderabad areas and ask us to verify coverage for your exact address before confirming.', href: '/hyderabad/' },
   { icon: CreditCard, title: 'Price & payment', text: 'Services display ₹299. Confirm what it includes, any additional charges and accepted payment methods before approving work.', href: '/services/' },
   { icon: ShieldCheck, title: 'Cancellation & rescheduling', text: 'Contact us as early as possible to request a change or cancellation. Ask about any applicable fees in advance.', href: '/cancellation-policy/' },
 ];

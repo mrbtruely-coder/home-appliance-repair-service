@@ -18,9 +18,15 @@ export async function generateMetadata({ params }) {
     path: `/plans/${plan.slug}/`,
     keywords: [
       `${plan.name} Hyderabad`,
+      `${plan.name} appliance plan`,
       'home appliance membership Hyderabad',
       'appliance service AMC Hyderabad',
       'doorstep repair discounts',
+      'annual appliance maintenance contract',
+      'priority appliance technician Hyderabad',
+      'zero visit fee appliance plan',
+      'home care appliance package Hyderabad',
+      'extended warranty appliance plan',
     ],
   });
 }
